@@ -1,0 +1,46 @@
+services:
+  db_dev:
+    image: postgres:16-alpine
+    container_name: app_db_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: app_db_dev
+      POSTGRES_USER: django_user
+      POSTGRES_PASSWORD: django_pass
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - app_dev_network
+
+  web_dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    container_name: app_web_dev
+    restart: unless-stopped
+    env_file:
+      - .env.dev
+    environment:
+      DB_HOST: db_dev
+      DB_PORT: 5432
+      DB_NAME: app_db_dev
+    volumes:
+      - .:/app
+      - /app/venv
+      - /app/__pycache__
+      - /app/static
+      - /app/staticfiles
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db_dev
+    networks:
+      - app_dev_network
+
+volumes:
+  postgres_dev_data:
+
+networks:
+  app_dev_network:
