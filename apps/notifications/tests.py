@@ -118,6 +118,34 @@ class NotificationServiceTest(TestCase):
         self.assertIn("X-Signature", headers)
 
 
+class NotificationAdminBulkActionTest(TestCase):
+    def setUp(self):
+        self.superuser = User.objects.create_superuser(
+            username="admin_bulk", password="pass", email="admin_bulk@example.com"
+        )
+        self.user = User.objects.create_user(username="target_bulk", password="pass")
+        self.client.login(username="admin_bulk", password="pass")
+
+    def test_mark_as_read_action(self):
+        from apps.notifications.models import Notification
+        n = Notification.objects.create(
+            recipient=self.user,
+            title="Bulk test",
+            body="Body",
+            channel="in_app",
+        )
+        response = self.client.post(
+            "/admin/notifications/notification/",
+            {
+                "action": "mark_as_read",
+                "_selected_action": [n.pk],
+            },
+        )
+        self.assertIn(response.status_code, [200, 302])
+        n.refresh_from_db()
+        self.assertIsNotNone(n.read_at)
+
+
 class NotificationAdminRegisteredTest(TestCase):
     def test_notification_registered(self):
         from django.contrib import admin
