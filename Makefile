@@ -25,7 +25,7 @@ makemigrations:
 	$(DC) exec web_dev python manage.py makemigrations
 
 test:
-	$(DC) exec web_dev python manage.py test
+	$(DC) exec web_dev python manage.py test --settings=config.settings.test
 
 messages:
 	$(DC) exec web_dev python manage.py makemessages -l es -l en
