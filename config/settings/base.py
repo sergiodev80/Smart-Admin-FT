@@ -224,12 +224,18 @@ UNFOLD = {
                 ],
             },
             # --- Agregar secciones del proyecto aquí ---
-            # {
-            #     "title": _("Mi módulo"),
-            #     "separator": True,
-            #     "collapsible": True,
-            #     "items": [...],
-            # },
+            {
+                "title": _("Clientes"),
+                "separator": True,
+                "collapsible": False,
+                "items": [
+                    {
+                        "title": _("Clientes"),
+                        "icon": "people",
+                        "link": "/admin/clientes/cliente/",
+                    },
+                ],
+            },
         ],
     },
 }
