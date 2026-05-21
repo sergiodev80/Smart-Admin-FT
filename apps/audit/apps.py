@@ -7,5 +7,14 @@ class AuditConfig(AppConfig):
     name = "apps.audit"
     verbose_name = _("Auditoría")
 
+    plugin_urls = []
+    plugin_middleware = [
+        {
+            "middleware": "apps.audit.middleware.AuditMiddleware",
+            "insert_after": "django.contrib.auth.middleware.AuthenticationMiddleware",
+        }
+    ]
+    plugin_settings = {}
+
     def ready(self):
         import apps.audit.signals  # noqa: F401
