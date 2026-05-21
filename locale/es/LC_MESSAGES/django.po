@@ -1,0 +1,423 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-21 00:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: apps/audit/apps.py:8
+msgid "Auditoría"
+msgstr ""
+
+#: apps/audit/models.py:8
+msgid "Crear"
+msgstr ""
+
+#: apps/audit/models.py:9
+msgid "Actualizar"
+msgstr ""
+
+#: apps/audit/models.py:10
+msgid "Eliminar"
+msgstr ""
+
+#: apps/audit/models.py:11
+msgid "Inicio de sesión"
+msgstr ""
+
+#: apps/audit/models.py:12
+msgid "Cierre de sesión"
+msgstr ""
+
+#: apps/audit/models.py:13
+msgid "Ver"
+msgstr ""
+
+#: apps/audit/models.py:21 apps/notifications/models.py:57
+#: apps/permissions/models.py:38 apps/permissions/models.py:73
+msgid "usuario"
+msgstr ""
+
+#: apps/audit/models.py:26
+msgid "acción"
+msgstr ""
+
+#: apps/audit/models.py:31
+msgid "modelo"
+msgstr ""
+
+#: apps/audit/models.py:37
+msgid "ID objeto"
+msgstr ""
+
+#: apps/audit/models.py:41
+msgid "representación del objeto"
+msgstr ""
+
+#: apps/audit/models.py:46
+msgid "cambios"
+msgstr ""
+
+#: apps/audit/models.py:51
+msgid "dirección IP"
+msgstr ""
+
+#: apps/audit/models.py:57
+msgid "user agent"
+msgstr ""
+
+#: apps/audit/models.py:61
+msgid "fecha y hora"
+msgstr ""
+
+#: apps/audit/models.py:65
+msgid "registro de auditoría"
+msgstr ""
+
+#: apps/audit/models.py:66
+msgid "registros de auditoría"
+msgstr ""
+
+#: apps/config/admin.py:16
+msgid "Metadatos"
+msgstr ""
+
+#: apps/config/admin.py:19
+msgid "valor interpretado"
+msgstr ""
+
+#: apps/config/apps.py:8
+msgid "Configuración"
+msgstr ""
+
+#: apps/config/models.py:7
+msgid "Texto"
+msgstr ""
+
+#: apps/config/models.py:8
+msgid "Entero"
+msgstr ""
+
+#: apps/config/models.py:9
+msgid "Booleano"
+msgstr ""
+
+#: apps/config/models.py:10
+msgid "JSON"
+msgstr ""
+
+#: apps/config/models.py:15
+msgid "clave"
+msgstr ""
+
+#: apps/config/models.py:16
+msgid "Identificador único. Ej: max_upload_size"
+msgstr ""
+
+#: apps/config/models.py:19
+msgid "valor"
+msgstr ""
+
+#: apps/config/models.py:20
+msgid "Siempre almacenado como texto."
+msgstr ""
+
+#: apps/config/models.py:26
+msgid "tipo de valor"
+msgstr ""
+
+#: apps/config/models.py:30 apps/permissions/models.py:16
+msgid "descripción"
+msgstr ""
+
+#: apps/config/models.py:31
+msgid "Propósito legible de esta configuración."
+msgstr ""
+
+#: apps/config/models.py:35
+msgid "pública"
+msgstr ""
+
+#: apps/config/models.py:36
+msgid "Si está marcada, se expone en el contexto de templates."
+msgstr ""
+
+#: apps/config/models.py:40
+msgid "configuración del sitio"
+msgstr ""
+
+#: apps/config/models.py:41
+msgid "configuraciones del sitio"
+msgstr ""
+
+#: apps/core/forms.py:19
+msgid "Username / Email"
+msgstr ""
+
+#: apps/notifications/apps.py:8
+msgid "Notificaciones"
+msgstr ""
+
+#: apps/notifications/models.py:8
+msgid "En la app"
+msgstr ""
+
+#: apps/notifications/models.py:9
+#: templates/registration/password_reset_form.html:19
+msgid "Email"
+msgstr ""
+
+#: apps/notifications/models.py:10
+msgid "Webhook"
+msgstr ""
+
+#: apps/notifications/models.py:16
+msgid "destinatario"
+msgstr ""
+
+#: apps/notifications/models.py:18
+msgid "título"
+msgstr ""
+
+#: apps/notifications/models.py:19
+msgid "cuerpo"
+msgstr ""
+
+#: apps/notifications/models.py:23
+msgid "canal"
+msgstr ""
+
+#: apps/notifications/models.py:28
+msgid "leída el"
+msgstr ""
+
+#: apps/notifications/models.py:33
+msgid "enviada el"
+msgstr ""
+
+#: apps/notifications/models.py:38
+msgid "payload"
+msgstr ""
+
+#: apps/notifications/models.py:39
+msgid "Datos adicionales para webhooks."
+msgstr ""
+
+#: apps/notifications/models.py:41
+msgid "creada el"
+msgstr ""
+
+#: apps/notifications/models.py:44
+msgid "notificación"
+msgstr ""
+
+#: apps/notifications/models.py:45
+msgid "notificaciones"
+msgstr ""
+
+#: apps/notifications/models.py:59
+msgid "URL"
+msgstr ""
+
+#: apps/notifications/models.py:60
+msgid "activo"
+msgstr ""
+
+#: apps/notifications/models.py:64
+msgid "secreto"
+msgstr ""
+
+#: apps/notifications/models.py:65
+msgid "Usado para firmar el payload con HMAC-SHA256."
+msgstr ""
+
+#: apps/notifications/models.py:69
+msgid "endpoint webhook"
+msgstr ""
+
+#: apps/notifications/models.py:70
+msgid "endpoints webhook"
+msgstr ""
+
+#: apps/permissions/admin.py:13
+msgid "rol asignado"
+msgstr ""
+
+#: apps/permissions/admin.py:14
+msgid "roles asignados"
+msgstr ""
+
+#: apps/permissions/admin.py:23
+msgid "usuarios"
+msgstr ""
+
+#: apps/permissions/apps.py:8
+msgid "Permisos y roles"
+msgstr ""
+
+#: apps/permissions/models.py:12
+msgid "nombre"
+msgstr ""
+
+#: apps/permissions/models.py:21
+msgid "permisos"
+msgstr ""
+
+#: apps/permissions/models.py:25 apps/permissions/models.py:44
+msgid "rol"
+msgstr ""
+
+#: apps/permissions/models.py:26
+msgid "roles"
+msgstr ""
+
+#: apps/permissions/models.py:48
+msgid "asignado el"
+msgstr ""
+
+#: apps/permissions/models.py:56
+msgid "asignado por"
+msgstr ""
+
+#: apps/permissions/models.py:60
+msgid "rol de usuario"
+msgstr ""
+
+#: apps/permissions/models.py:61
+msgid "roles de usuario"
+msgstr ""
+
+#: apps/permissions/models.py:78
+msgid "tipo de contenido"
+msgstr ""
+
+#: apps/permissions/models.py:82
+msgid "ID del objeto"
+msgstr ""
+
+#: apps/permissions/models.py:87
+msgid "permiso"
+msgstr ""
+
+#: apps/permissions/models.py:91
+msgid "permiso por objeto"
+msgstr ""
+
+#: apps/permissions/models.py:92
+msgid "permisos por objeto"
+msgstr ""
+
+#: templates/admin/login.html:15
+msgid "Django site admin"
+msgstr ""
+
+#: templates/admin/login.html:15
+msgid "Welcome back to"
+msgstr ""
+
+#: templates/admin/login.html:26
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: templates/admin/login.html:47 templates/core/request_access.html:39
+#: templates/registration/password_reset_complete.html:13
+msgid "Log in"
+msgstr ""
+
+#: templates/admin/login.html:55
+msgid "Forgotten your password or username?"
+msgstr ""
+
+#: templates/admin/login.html:64 templates/core/request_access.html:5
+msgid "Request Access"
+msgstr ""
+
+#: templates/core/request_access.html:7
+msgid ""
+"If you are a registered collaborator in the ERP, enter your email and we "
+"will send you a link to activate your account."
+msgstr ""
+
+#: templates/core/request_access.html:33
+msgid "Send link"
+msgstr ""
+
+#: templates/core/request_access.html:38
+msgid "Already have an account?"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:5
+msgid "Password updated!"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:7
+msgid "Your password was saved successfully. You can now log in."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:5
+msgid "Set new password"
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:9
+msgid "Enter your new password twice to verify it's correct."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:14
+#: templates/registration/password_reset_form.html:12
+msgid "Please correct the errors below."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:32
+msgid "Save password"
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:37
+msgid "The link is no longer valid. It may have already been used or expired."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:41
+msgid "Request a new link"
+msgstr ""
+
+#: templates/registration/password_reset_done.html:5
+msgid "Check your email"
+msgstr ""
+
+#: templates/registration/password_reset_done.html:7
+msgid ""
+"We sent you instructions to recover your password. If you don't see it, "
+"check your spam folder."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:12
+#: templates/registration/password_reset_form.html:34
+msgid "Back to login"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:5
+msgid "Recover password"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:7
+msgid ""
+"Enter your email and we will send you instructions to set a new password."
+msgstr ""
+
+#: templates/registration/password_reset_form.html:28
+msgid "Reset my password"
+msgstr ""

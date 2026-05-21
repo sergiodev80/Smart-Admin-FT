@@ -28,7 +28,11 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     "apps.core",
-    # Agregar apps del proyecto aquí
+    # --- v2 optional apps — uncomment to activate ---
+    # "apps.notifications",
+    # "apps.audit",
+    # "apps.config",
+    # "apps.permissions",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS

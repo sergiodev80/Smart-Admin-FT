@@ -110,3 +110,72 @@ Variables críticas:
 
 Para cualquier tarea de UI (templates, vistas, admin) usar el skill `solid-platform-design`
 que carga automáticamente las guías de componentes Unfold del proyecto.
+
+---
+
+## Apps v2 — Módulos opcionales
+
+Activar cualquier app v2:
+1. Descomentar la app en `LOCAL_APPS` en `config/settings/base.py`
+2. Ejecutar `make migrate`
+
+### apps/config — Configuración dinámica
+
+Settings del sistema editables desde el admin sin tocar código (clave-valor con tipos).
+
+```python
+from apps.config.services import ConfigService
+
+value = ConfigService.get("mi_clave", default="fallback")
+ConfigService.set("mi_clave", "nuevo_valor")
+```
+
+### apps/audit — Registro de auditoría completo
+
+Captura CRUD del admin, login, logout y navegación (opcional).
+
+Agregar `AuditMixin` a cualquier `ModelAdmin` para auto-registrar CRUD:
+
+```python
+from apps.audit.mixins import AuditMixin
+from unfold.admin import ModelAdmin
+
+class MiModelAdmin(AuditMixin, ModelAdmin):
+    ...
+```
+
+Para rastrear navegación, agregar a `MIDDLEWARE`:
+```python
+"apps.audit.middleware.AuditMiddleware",
+```
+
+### apps/notifications — Notificaciones (in-app + email + webhook)
+
+```python
+from apps.notifications.services import NotificationService
+
+NotificationService.send(
+    user=user,
+    title="Asunto",
+    body="Mensaje",
+    channels=["in_app", "email", "webhook"],
+    payload={"key": "value"},  # solo para webhook
+)
+```
+
+Webhooks firmados con HMAC-SHA256 via `X-Signature` header.
+
+### apps/permissions — Roles y permisos granulares
+
+Cargar roles por defecto tras migrar:
+```bash
+docker compose -f docker-compose.dev.yml exec web_dev python manage.py loaddata apps/permissions/fixtures/default_roles.json
+```
+
+## Reglas transversales v2
+
+- Todo `ModelAdmin` hereda de `unfold.admin.ModelAdmin`.
+- Todo string de UI en `_()` o `{% trans %}` desde el primer commit.
+- Traducciones centralizadas en `locale/es/` y `locale/en/` (raíz del proyecto).
+- Lógica de negocio solo en clases `*Service`, nunca en vistas o admin.
+- Si una funcionalidad requiere algo no disponible en Unfold nativo, consultar antes de implementar.

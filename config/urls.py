@@ -15,5 +15,5 @@ urlpatterns = [
     path("reset/done/", auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
     path("admin/", admin.site.urls),
     path("solicitar-acceso/", solicitar_acceso, name="request_access"),
-    path("traducciones/", include("apps.translations.urls")),
+    # Agregar URLs específicas del proyecto aquí
 ]

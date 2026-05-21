@@ -39,7 +39,7 @@ make migrate
 make createsuperuser
 ```
 
-El proyecto corre en [http://localhost:8001](http://localhost:8001)
+El proyecto corre en [http://localhost:8002](http://localhost:8002)
 
 ## Personalización al usar el template
 
