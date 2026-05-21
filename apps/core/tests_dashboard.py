@@ -30,18 +30,22 @@ class DashboardCallbackTest(TestCase):
             self.assertIn("value", card)
             self.assertIn("icon", card)
 
-    def test_dashboard_callback_returns_context_with_recent_users(self):
+    def test_dashboard_callback_returns_context_with_users_table(self):
         from apps.core.dashboard import dashboard_callback
         request = self.factory.get("/admin/")
         request.user = self.user
         context = {}
         result = dashboard_callback(request, context)
-        self.assertIn("recent_users", result)
+        self.assertIn("users_table", result)
+        self.assertTrue(hasattr(result["users_table"], "headers"))
+        self.assertTrue(hasattr(result["users_table"], "rows"))
 
-    def test_dashboard_callback_returns_context_with_recent_audit(self):
+    def test_dashboard_callback_returns_context_with_audit_table(self):
         from apps.core.dashboard import dashboard_callback
         request = self.factory.get("/admin/")
         request.user = self.user
         context = {}
         result = dashboard_callback(request, context)
-        self.assertIn("recent_audit", result)
+        self.assertIn("audit_table", result)
+        self.assertTrue(hasattr(result["audit_table"], "headers"))
+        self.assertTrue(hasattr(result["audit_table"], "rows"))

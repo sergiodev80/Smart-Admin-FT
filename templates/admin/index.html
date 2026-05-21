@@ -1,5 +1,5 @@
 {% extends "admin/base.html" %}
-{% load i18n %}
+{% load i18n unfold %}
 
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
@@ -8,67 +8,39 @@
 {% endblock %}
 
 {% block content %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<div class="space-y-6">
-
-  {# Stat Cards #}
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-    {% for card in stat_cards %}
-      {% include "partials/dashboard_card.html" with card=card %}
-    {% endfor %}
-  </div>
-
-  {# Chart slot #}
-  {% include "partials/dashboard_chart.html" %}
-
-  {# List widgets #}
-  <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-
-    {# Últimos usuarios #}
-    <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
-      <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200">{% trans "Últimos usuarios" %}</h3>
-        <a href="{% url 'admin:core_user_changelist' %}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">{% trans "Ver todos" %}</a>
-      </div>
-      <ul class="divide-y divide-gray-100 dark:divide-gray-700">
-        {% for user in recent_users %}
-        <li class="flex items-center gap-3 px-4 py-3">
-          <span class="material-symbols-outlined text-gray-400 text-lg">person</span>
-          <div class="min-w-0 flex-1">
-            <p class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{{ user.username }}</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ user.email }}</p>
-          </div>
-          <span class="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0">{{ user.date_joined|date:"d/m/y" }}</span>
-        </li>
-        {% empty %}
-        <li class="px-4 py-4 text-sm text-gray-400 dark:text-gray-500 text-center">{% trans "Sin usuarios" %}</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    {# Últimas entradas de auditoría #}
-    <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
-      <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200">{% trans "Auditoría reciente" %}</h3>
-        <a href="{% url 'admin:audit_auditlog_changelist' %}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">{% trans "Ver todas" %}</a>
-      </div>
-      <ul class="divide-y divide-gray-100 dark:divide-gray-700">
-        {% for log in recent_audit %}
-        <li class="flex items-center gap-3 px-4 py-3">
-          <span class="material-symbols-outlined text-gray-400 text-lg">history</span>
-          <div class="min-w-0 flex-1">
-            <p class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{{ log.model_name }} — {{ log.get_action_display }}</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ log.object_repr }}</p>
-          </div>
-          <span class="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0">{{ log.timestamp|date:"d/m H:i" }}</span>
-        </li>
-        {% empty %}
-        <li class="px-4 py-4 text-sm text-gray-400 dark:text-gray-500 text-center">{% trans "Sin registros" %}</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-  </div>
+{# Stat Cards — inline style para grid de 3 columnas (Unfold no compila clases Tailwind custom) #}
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem;">
+  {% for card in stat_cards %}
+    {% component "unfold/components/card.html" with icon=card.icon %}
+      {% component "unfold/components/title.html" %}{{ card.value }}{% endcomponent %}
+      {% component "unfold/components/text.html" %}{{ card.title }} — {{ card.description }}{% endcomponent %}
+    {% endcomponent %}
+  {% endfor %}
 </div>
+
+{# Chart slot — Chart.js está incluido en Unfold, no se necesita CDN #}
+{# PROYECTO: actualiza chart_data en apps/core/dashboard.py con datos reales #}
+<div style="margin-bottom:2rem;">
+  {% component "unfold/components/card.html" with title=_("Actividad (ejemplo)") %}
+    {% component "unfold/components/chart/bar.html" with data=chart_data height="120" %}{% endcomponent %}
+    {% component "unfold/components/text.html" %}
+      {% trans "Placeholder — reemplazar con datos reales en apps/core/dashboard.py" %}
+    {% endcomponent %}
+  {% endcomponent %}
+</div>
+
+{# List widgets — 2 columnas #}
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
+
+  {% component "unfold/components/card.html" with title=_("Últimos usuarios") %}
+    {% component "unfold/components/table.html" with table=users_table card_included=1 %}{% endcomponent %}
+  {% endcomponent %}
+
+  {% component "unfold/components/card.html" with title=_("Auditoría reciente") %}
+    {% component "unfold/components/table.html" with table=audit_table card_included=1 %}{% endcomponent %}
+  {% endcomponent %}
+
+</div>
+
 {% endblock %}
