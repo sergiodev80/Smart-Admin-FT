@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: smart-admin-ft\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-21 00:15+0000\n"
+"POT-Creation-Date: 2026-05-21 17:38+0000\n"
 "PO-Revision-Date: 2026-05-21 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
@@ -14,6 +14,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/audit/admin.py:24
+msgid "Evento"
+msgstr ""
+
+#: apps/audit/admin.py:28
+#, fuzzy
+#| msgid "ID objeto"
+msgid "Objeto"
+msgstr "object ID"
+
+#: apps/audit/admin.py:32
+#, fuzzy
+#| msgid "cambios"
+msgid "Cambios"
+msgstr "changes"
 
 #: apps/audit/apps.py:8
 msgid "Auditoría"
@@ -88,17 +104,132 @@ msgstr "audit log"
 msgid "registros de auditoría"
 msgstr "audit logs"
 
-#: apps/config/admin.py:16
+#: apps/clientes/admin.py:21
+msgid "Información"
+msgstr "Information"
+
+#: apps/clientes/admin.py:28 apps/clientes/admin.py:39
+#: apps/notifications/admin.py:26
+msgid "Estado"
+msgstr "Status"
+
+#: apps/clientes/admin.py:48
+msgid "Marcar como inactivo"
+msgstr "Mark as inactive"
+
+#: apps/clientes/apps.py:8 config/settings/base.py:228
+#: config/settings/base.py:233
+msgid "Clientes"
+msgstr "Clients"
+
+#: apps/clientes/models.py:7 apps/notifications/admin.py:100
+msgid "Activo"
+msgstr "Active"
+
+#: apps/clientes/models.py:8
+msgid "Inactivo"
+msgstr "Inactive"
+
+#: apps/clientes/models.py:10 apps/permissions/models.py:12
+msgid "nombre"
+msgstr "name"
+
+#: apps/clientes/models.py:11
+msgid "email"
+msgstr "email"
+
+#: apps/clientes/models.py:15
+msgid "teléfono"
+msgstr "phone"
+
+#: apps/clientes/models.py:21
+msgid "estado"
+msgstr "status"
+
+#: apps/clientes/models.py:23
+msgid "creado el"
+msgstr "created at"
+
+#: apps/clientes/models.py:26
+msgid "cliente"
+msgstr "client"
+
+#: apps/clientes/models.py:27
+msgid "clientes"
+msgstr "clients"
+
+#: apps/clientes/services.py:19
+msgid "Nuevo cliente registrado"
+msgstr "New client registered"
+
+#: apps/clientes/services.py:20
+#, python-format
+msgid "Se registró el cliente: %(nombre)s"
+msgstr "Client registered: %(nombre)s"
+
+#: apps/config/admin.py:42
+#, fuzzy
+#| msgid "clave"
+msgid "Clave"
+msgstr "key"
+
+#: apps/config/admin.py:49
+msgid "Tipo"
+msgstr ""
+
+#: apps/config/admin.py:58
+msgid "Visibilidad"
+msgstr ""
+
+#: apps/config/admin.py:63
+#, fuzzy
+#| msgid "pública"
+msgid "Pública"
+msgstr "public"
+
+#: apps/config/admin.py:67
+msgid "Privada"
+msgstr ""
+
+#: apps/config/admin.py:70
+#, fuzzy
+#| msgid "descripción"
+msgid "Descripción"
+msgstr "description"
+
+#: apps/config/admin.py:76
+#, fuzzy
+#| msgid "valor"
+msgid "Valor"
+msgstr "value"
+
+#: apps/config/admin.py:83 apps/config/models.py:26
+msgid "tipo de valor"
+msgstr "value type"
+
+#: apps/config/admin.py:101 apps/config/admin.py:105
 msgid "Metadatos"
 msgstr "Metadata"
-
-#: apps/config/admin.py:19
-msgid "valor interpretado"
-msgstr "interpreted value"
 
 #: apps/config/apps.py:8
 msgid "Configuración"
 msgstr "Configuration"
+
+#: apps/config/forms.py:27
+msgid "Verdadero"
+msgstr ""
+
+#: apps/config/forms.py:27
+msgid "Falso"
+msgstr ""
+
+#: apps/config/forms.py:28 apps/config/forms.py:33 apps/config/models.py:19
+msgid "valor"
+msgstr "value"
+
+#: apps/config/forms.py:29 apps/config/forms.py:34 apps/config/models.py:20
+msgid "Siempre almacenado como texto."
+msgstr "Always stored as text."
 
 #: apps/config/models.py:7
 msgid "Texto"
@@ -124,18 +255,6 @@ msgstr "key"
 msgid "Identificador único. Ej: max_upload_size"
 msgstr "Unique identifier. E.g.: max_upload_size"
 
-#: apps/config/models.py:19
-msgid "valor"
-msgstr "value"
-
-#: apps/config/models.py:20
-msgid "Siempre almacenado como texto."
-msgstr "Always stored as text."
-
-#: apps/config/models.py:26
-msgid "tipo de valor"
-msgstr "value type"
-
 #: apps/config/models.py:30 apps/permissions/models.py:16
 msgid "descripción"
 msgstr "description"
@@ -160,22 +279,129 @@ msgstr "site configuration"
 msgid "configuraciones del sitio"
 msgstr "site configurations"
 
+#: apps/core/dashboard.py:44 config/settings/base.py:185
+msgid "Usuarios"
+msgstr "Users"
+
+#: apps/core/dashboard.py:44
+msgid "Total registrados"
+msgstr ""
+
+#: apps/core/dashboard.py:45 apps/notifications/apps.py:8
+#: config/settings/base.py:205 templates/partials/notifications_bell.html:12
+#: templates/partials/notifications_list.html:5
+msgid "Notificaciones"
+msgstr "Notifications"
+
+#: apps/core/dashboard.py:45
+msgid "Sin leer"
+msgstr ""
+
+#: apps/core/dashboard.py:46
+#, fuzzy
+#| msgid "Auditoría"
+msgid "Auditoría hoy"
+msgstr "Audit"
+
+#: apps/core/dashboard.py:46
+#, fuzzy
+#| msgid "Registros de auditoría"
+msgid "Registros de hoy"
+msgstr "Audit logs"
+
+#: apps/core/dashboard.py:47
+msgid "Clientes activos"
+msgstr ""
+
+#: apps/core/dashboard.py:47
+#, fuzzy
+#| msgid "activo"
+msgid "Total activos"
+msgstr "Total active"
+
+#: apps/core/dashboard.py:50
+#, fuzzy
+#| msgid "Usuarios"
+msgid "Usuario"
+msgstr "Users"
+
+#: apps/core/dashboard.py:50 apps/notifications/models.py:9
+#: templates/registration/password_reset_form.html:19
+msgid "Email"
+msgstr "Email"
+
+#: apps/core/dashboard.py:50
+#, fuzzy
+#| msgid "Registros de auditoría"
+msgid "Registrado"
+msgstr "Audit logs"
+
+#: apps/core/dashboard.py:57
+#, fuzzy
+#| msgid "acción"
+msgid "Acción"
+msgstr "action"
+
+#: apps/core/dashboard.py:57
+#, fuzzy
+#| msgid "modelo"
+msgid "Modelo"
+msgstr "model"
+
+#: apps/core/dashboard.py:57
+msgid "Fecha"
+msgstr ""
+
 #: apps/core/forms.py:19
 msgid "Username / Email"
 msgstr "Username / Email"
 
-#: apps/notifications/apps.py:8
-msgid "Notificaciones"
-msgstr "Notifications"
+#: apps/notifications/admin.py:22
+msgid "Mensaje"
+msgstr ""
+
+#: apps/notifications/admin.py:30
+#, fuzzy
+#| msgid "payload"
+msgid "Payload"
+msgstr "payload"
+
+#: apps/notifications/admin.py:36
+msgid "Marcar seleccionadas como leídas"
+msgstr ""
+
+#: apps/notifications/admin.py:60
+msgid "Endpoint"
+msgstr "Endpoint"
+
+#: apps/notifications/admin.py:64
+msgid ""
+"El sistema enviará un HTTP POST a esta URL cada vez que se dispare una "
+"notificación con <code>channel='webhook'</code> para el usuario seleccionado."
+msgstr ""
+
+#: apps/notifications/admin.py:70
+msgid "Seguridad"
+msgstr "Security"
+
+#: apps/notifications/admin.py:74
+msgid ""
+"Si se configura un secreto, cada POST incluirá el header <code>X-Signature: "
+"sha256=&lt;hmac&gt;</code> firmado con HMAC-SHA256. Ver la guía de "
+"integración abajo para verificarlo en tu receptor."
+msgstr ""
+
+#: apps/notifications/admin.py:82 apps/notifications/models.py:59
+msgid "URL"
+msgstr "URL"
+
+#: apps/notifications/admin.py:93
+msgid "Firmado"
+msgstr "Signed"
 
 #: apps/notifications/models.py:8
 msgid "En la app"
 msgstr "In-app"
-
-#: apps/notifications/models.py:9
-#: templates/registration/password_reset_form.html:19
-msgid "Email"
-msgstr "Email"
 
 #: apps/notifications/models.py:10
 msgid "Webhook"
@@ -225,10 +451,6 @@ msgstr "notification"
 msgid "notificaciones"
 msgstr "notifications"
 
-#: apps/notifications/models.py:59
-msgid "URL"
-msgstr "URL"
-
 #: apps/notifications/models.py:60
 msgid "activo"
 msgstr "active"
@@ -249,25 +471,21 @@ msgstr "webhook endpoint"
 msgid "endpoints webhook"
 msgstr "webhook endpoints"
 
-#: apps/permissions/admin.py:13
+#: apps/permissions/admin.py:17
 msgid "rol asignado"
 msgstr "assigned role"
 
-#: apps/permissions/admin.py:14
+#: apps/permissions/admin.py:18
 msgid "roles asignados"
 msgstr "assigned roles"
 
-#: apps/permissions/admin.py:23
+#: apps/permissions/admin.py:30
 msgid "usuarios"
 msgstr "users"
 
 #: apps/permissions/apps.py:8
 msgid "Permisos y roles"
 msgstr "Permissions and roles"
-
-#: apps/permissions/models.py:12
-msgid "nombre"
-msgstr "name"
 
 #: apps/permissions/models.py:21
 msgid "permisos"
@@ -317,9 +535,57 @@ msgstr "object permission"
 msgid "permisos por objeto"
 msgstr "object permissions"
 
-#: templates/admin/login.html:15
+#: config/settings/base.py:180
+msgid "Administración"
+msgstr "Administration"
+
+#: config/settings/base.py:190
+msgid "Roles"
+msgstr "Roles"
+
+#: config/settings/base.py:195
+msgid "Roles de usuario"
+msgstr "User roles"
+
+#: config/settings/base.py:200
+msgid "Permisos por objeto"
+msgstr "Object permissions"
+
+#: config/settings/base.py:210
+msgid "Endpoints webhook"
+msgstr "Webhook endpoints"
+
+#: config/settings/base.py:215
+msgid "Configuraciones del sitio"
+msgstr "Site configurations"
+
+#: config/settings/base.py:220
+msgid "Registros de auditoría"
+msgstr "Audit logs"
+
+#: templates/admin/index.html:4 templates/admin/login.html:15
 msgid "Django site admin"
 msgstr "Django site admin"
+
+#: templates/admin/index.html:25 templates/partials/dashboard_chart.html:7
+msgid "Actividad (ejemplo)"
+msgstr ""
+
+#: templates/admin/index.html:28
+msgid "Placeholder — reemplazar con datos reales en apps/core/dashboard.py"
+msgstr ""
+
+#: templates/admin/index.html:36
+#, fuzzy
+#| msgid "usuarios"
+msgid "Últimos usuarios"
+msgstr "users"
+
+#: templates/admin/index.html:40
+#, fuzzy
+#| msgid "Auditoría"
+msgid "Auditoría reciente"
+msgstr "Audit"
 
 #: templates/admin/login.html:15
 msgid "Welcome back to"
@@ -362,6 +628,52 @@ msgstr "Send link"
 #: templates/core/request_access.html:38
 msgid "Already have an account?"
 msgstr "Already have an account?"
+
+#: templates/notifications/webhook_endpoint_guide.html:5
+msgid "Guía de integración"
+msgstr "Integration guide"
+
+#: templates/notifications/webhook_endpoint_guide.html:13
+msgid "1 — Disparar desde código Python"
+msgstr "1 — Trigger from Python code"
+
+#: templates/notifications/webhook_endpoint_guide.html:29
+msgid "2 — POST que recibirá tu URL"
+msgstr "2 — POST your URL will receive"
+
+#: templates/notifications/webhook_endpoint_guide.html:32
+msgid "Headers:"
+msgstr "Headers:"
+
+#: templates/notifications/webhook_endpoint_guide.html:46
+msgid "3 — Verificar la firma HMAC en tu receptor"
+msgstr "3 — Verify the HMAC signature in your receiver"
+
+#: templates/notifications/webhook_endpoint_guide.html:56
+msgid ""
+"Si no se configura un secreto, el header X-Signature se envía vacío y no "
+"debe verificarse."
+msgstr ""
+"If no secret is configured, the X-Signature header is sent empty and should "
+"not be verified."
+
+#: templates/partials/dashboard_chart.html:10
+msgid "Placeholder — reemplazar con datos reales"
+msgstr ""
+
+#: templates/partials/notifications_list.html:12
+msgid "atrás"
+msgstr ""
+
+#: templates/partials/notifications_list.html:15
+#, fuzzy
+#| msgid "notificaciones"
+msgid "Sin notificaciones nuevas"
+msgstr "notifications"
+
+#: templates/partials/notifications_list.html:21
+msgid "Ver todas"
+msgstr ""
 
 #: templates/registration/password_reset_complete.html:5
 msgid "Password updated!"
@@ -426,3 +738,6 @@ msgstr ""
 #: templates/registration/password_reset_form.html:28
 msgid "Reset my password"
 msgstr "Reset my password"
+
+#~ msgid "valor interpretado"
+#~ msgstr "interpreted value"
