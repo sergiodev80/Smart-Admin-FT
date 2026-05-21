@@ -23,7 +23,6 @@ def dashboard_callback(request, context):
     """
     from apps.audit.models import AuditLog
     from apps.notifications.models import Notification
-    from apps.clientes.models import Cliente
 
     today = timezone.now().date()
 
@@ -34,7 +33,6 @@ def dashboard_callback(request, context):
         read_at__isnull=True,
     ).count()
     audit_today = AuditLog.objects.filter(timestamp__date=today).count()
-    total_clientes_activos = Cliente.objects.filter(estado="activo").count()
 
     recent_users_qs = User.objects.order_by("-date_joined")[:5]
     recent_audit_qs = AuditLog.objects.order_by("-timestamp")[:5]
@@ -44,7 +42,7 @@ def dashboard_callback(request, context):
             {"title": _("Usuarios"), "value": total_users, "icon": "group", "description": _("Total registrados")},
             {"title": _("Notificaciones"), "value": unread_notifications, "icon": "notifications", "description": _("Sin leer")},
             {"title": _("Auditoría hoy"), "value": audit_today, "icon": "history", "description": _("Registros de hoy")},
-            {"title": _("Clientes activos"), "value": total_clientes_activos, "icon": "people", "description": _("Total activos")},
+            # PROYECTO: agregar stat cards específicas del proyecto aquí
         ],
         "users_table": _Table(
             headers=[_("Usuario"), _("Email"), _("Registrado")],

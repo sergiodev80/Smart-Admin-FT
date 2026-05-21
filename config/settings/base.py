@@ -35,7 +35,6 @@ LOCAL_APPS = [
     "apps.audit",
     "apps.config",
     "apps.permissions",
-    "apps.clientes",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
@@ -224,18 +223,6 @@ UNFOLD = {
                 ],
             },
             # --- Agregar secciones del proyecto aquí ---
-            {
-                "title": _("Clientes"),
-                "separator": True,
-                "collapsible": False,
-                "items": [
-                    {
-                        "title": _("Clientes"),
-                        "icon": "people",
-                        "link": "/admin/clientes/cliente/",
-                    },
-                ],
-            },
         ],
     },
 }
