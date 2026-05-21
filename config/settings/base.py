@@ -4,7 +4,6 @@ Reemplazar los valores TODO antes de usar en producción.
 """
 from pathlib import Path
 from dotenv import load_dotenv
-from django.utils.translation import gettext_lazy as _
 import os
 
 load_dotenv()
@@ -170,62 +169,7 @@ UNFOLD = {
     },
     "SIDEBAR": {
         "show_search": True,
-        "show_all_applications": False,
-        "navigation": [
-            {
-                "title": _("Administración"),
-                "separator": False,
-                "collapsible": True,
-                "items": [
-                    {
-                        "title": _("Usuarios"),
-                        "icon": "group",
-                        "link": "/admin/core/user/",
-                    },
-                    {
-                        "title": _("Roles"),
-                        "icon": "shield_person",
-                        "link": "/admin/permissions/role/",
-                    },
-                    {
-                        "title": _("Roles de usuario"),
-                        "icon": "manage_accounts",
-                        "link": "/admin/permissions/userrole/",
-                    },
-                    {
-                        "title": _("Permisos por objeto"),
-                        "icon": "lock",
-                        "link": "/admin/permissions/objectpermission/",
-                    },
-                    {
-                        "title": _("Notificaciones"),
-                        "icon": "notifications",
-                        "link": "/admin/notifications/notification/",
-                    },
-                    {
-                        "title": _("Endpoints webhook"),
-                        "icon": "webhook",
-                        "link": "/admin/notifications/webhookendpoint/",
-                    },
-                    {
-                        "title": _("Configuraciones del sitio"),
-                        "icon": "settings",
-                        "link": "/admin/config/siteconfig/",
-                    },
-                    {
-                        "title": _("Registros de auditoría"),
-                        "icon": "history",
-                        "link": "/admin/audit/auditlog/",
-                    },
-                ],
-            },
-            # --- Agregar secciones del proyecto aquí ---
-            # {
-            #     "title": _("Mi módulo"),
-            #     "separator": True,
-            #     "collapsible": True,
-            #     "items": [...],
-            # },
-        ],
+        "show_all_applications": True,
+        "navigation": [],
     },
 }
