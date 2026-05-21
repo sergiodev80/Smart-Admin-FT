@@ -23,10 +23,10 @@ digraph new_app {
     "Invoke brainstorming skill" [shape=doublecircle];
 
     "Start interview" -> "Ask next question";
-    "Ask next question" -> "More questions?" ;
+    "Ask next question" -> "More questions?";
     "More questions?" -> "Ask next question" [label="yes"];
     "More questions?" -> "Present design summary" [label="no"];
-    "Present design summary" -> "User approves?" ;
+    "Present design summary" -> "User approves?";
     "User approves?" -> "Ask next question" [label="no, revise"];
     "User approves?" -> "Invoke brainstorming skill" [label="yes"];
 }
@@ -46,35 +46,64 @@ Ask each question and wait for the answer before proceeding.
 
 **3. Features del template a usar**
 > "¿Cuáles de estas features del template quieres integrar? (puedes elegir varias)"
-> - `notifications` — notificar a usuarios cuando ocurre algo
-> - `audit` — registrar cambios automáticamente con AuditMixin
-> - `config` — parámetros configurables desde el admin (ConfigService)
+> - `notifications` — notificar usuarios con `NotificationService.send()`
+> - `audit` — registrar cambios automáticamente con `AuditMixin` en el ModelAdmin
+> - `config` — parámetros configurables con `ConfigService.get()` / `ConfigService.set()`
 > - `permissions` — roles y permisos granulares por objeto
 > - Ninguna por ahora
 
-**4. Acciones que disparan notificaciones** *(solo si eligió notifications)*
-> "¿Qué eventos deben disparar notificaciones? ¿A quién y qué dice el mensaje?"
-> Ejemplo: al asignar una task → notificación in-app al asignado.
+**4. Notificaciones** *(solo si eligió notifications)*
+> "¿Qué eventos disparan notificaciones, a quién y qué dice el mensaje?"
+> Ejemplo: al asignar una task → in-app al asignado: "Te asignaron la task: {título}".
 
-**5. Vistas custom** *(fuera del admin)*
+**5. Config keys** *(solo si eligió config)*
+> "¿Qué parámetros necesita configurar el admin sin tocar código?"
+> Ejemplo: `tasks_max_per_user` (int, default 20) — límite de tasks activas por usuario.
+> Estos se crearán en un data migration `000X_default_config.py`.
+
+**6. Señales vs Service**
+> "¿Hay lógica que deba ejecutarse automáticamente al guardar/crear/eliminar un modelo?"
+> - Sí → va en `signals.py` (ej: enviar notificación al guardar)
+> - No → toda la lógica va en `<App>Service` en `services.py`
+> Regla: lógica de negocio solo en `*Service`, nunca en vistas o admin.
+
+**7. Vistas custom** *(fuera del admin)*
 > "¿Necesita vistas propias fuera del admin de Unfold, o solo admin?"
 > A) Solo admin de Unfold
-> B) También vistas custom en `/nombre-app/`
+> B) También vistas en `/<app-name>/` — especifica qué páginas
 
-**6. Diseño del admin**
-> "¿Cómo quieres ver los datos en el admin? Por ejemplo:"
-> - Lista con badges de estado/prioridad
-> - Filtros por estado, asignado, fecha
-> - Tabs en el change form
-> - Acciones bulk (marcar como completado, reasignar)
+**8. Diseño del admin**
+> "¿Cómo quieres ver los datos en el admin?"
+>
+> Unfold soporta nativamente:
+> - `list_display` con `@display(label={...})` para badges de estado/prioridad con colores
+> - `compressed_fields = True` para listas densas
+> - `warn_unsaved_change = True` en todos los ModelAdmin
+> - `fieldsets` con `"classes": ["tab"]` para tabs en el change form
+> - `actions = [...]` con `@action(description=...)` para bulk actions
+> - `date_hierarchy` para navegación por fecha
+>
+> Describe qué quieres ver en la lista y en el formulario de edición.
 
-**7. Tests**
-> "¿Qué comportamientos son críticos de testear?"
-> Ejemplo: que crear una task notifica al asignado, que solo el asignado puede editar.
+**9. Dashboard widget**
+> "¿Quieres un widget de esta app en el dashboard principal (`/admin/`)?"
+> Ejemplo: "Mis tasks pendientes hoy" como stat card, o lista de tasks urgentes.
+> Esto se agrega a `apps/core/dashboard.py`.
+
+**10. Tests críticos**
+> "¿Qué comportamientos son imprescindibles de testear?"
+>
+> Piensa en estas categorías:
+> - **Model tests** — validaciones, métodos, `__str__`
+> - **Service tests** — lógica de negocio, que las notificaciones se disparan
+> - **Admin tests** — que el ModelAdmin está registrado, que las bulk actions funcionan
+> - **Signal tests** — que las señales se ejecutan correctamente *(si aplica)*
+>
+> Ejemplo: "que crear una task con asignado dispara notificación in-app".
 
 ## Design Summary Format
 
-Después de completar el interview, presenta el resumen así:
+Después del interview, presenta el resumen completo:
 
 ```
 ## Resumen de diseño — apps/<name>/
@@ -82,20 +111,35 @@ Después de completar el interview, presenta el resumen así:
 **Propósito:** ...
 
 **Modelos:**
-- ModelA: campos...
-- ModelB: campos...
+- ModelA: campos y tipos
+- ModelB: campos y tipos
 
 **Integraciones:**
-- notifications: evento → destinatario → mensaje
-- audit: modelos auditados
-- config: claves que se crearán
+- notifications: evento → canal → destinatario → mensaje
+- audit: modelos con AuditMixin
+- config: clave (tipo, default) — descripción
 - permissions: roles con acceso
 
-**Admin:** descripción del UX (badges, filtros, tabs, acciones)
+**Señales:** sí/no — qué eventos
 
-**Vistas custom:** sí/no + paths
+**Admin:**
+- Lista: columnas con badges, filtros, date_hierarchy, compressed_fields
+- Change form: fieldsets con tabs, warn_unsaved_change
+- Bulk actions: descripción
 
-**Tests críticos:** lista
+**Dashboard widget:** sí/no — descripción del widget
+
+**Sidebar:** entrada en UNFOLD["SIDEBAR"] bajo sección "..." con icono "..."
+
+**Vistas custom:** sí/no — paths
+
+**Data migrations:** sí/no — claves de config iniciales
+
+**Tests críticos:**
+- Model: ...
+- Service: ...
+- Admin: ...
+- Signal: ... (si aplica)
 
 ¿Apruebas este diseño o ajustamos algo?
 ```
@@ -108,8 +152,10 @@ Después de completar el interview, presenta el resumen así:
 
 - **One question at a time.** Never ask two questions in the same message.
 - **No code before approval.** The interview produces a design summary, not code.
-- **Skip irrelevant questions.** If the user says "solo admin", skip question 5.
-- **UI questions use the solid-platform-design skill** for Unfold component guidance when designing the admin layout.
-- **All new ModelAdmin must inherit from `unfold.admin.ModelAdmin`.**
-- **All UI strings in `_()` or `{% trans %}`.**
-- **Service pattern for business logic** — no logic in views or admin, only in `*Service` classes.
+- **Skip irrelevant questions.** Si eligió "solo admin" en pregunta 7, no hay vistas custom. Si no eligió config, saltar pregunta 5.
+- **Toda nueva app debe agregarse a `LOCAL_APPS` en `config/settings/base.py`** — indicarlo en el resumen.
+- **Toda nueva app debe aparecer en `UNFOLD["SIDEBAR"]`** — preguntar bajo qué sección y con qué icono (Material Symbols).
+- **Todo ModelAdmin hereda de `unfold.admin.ModelAdmin`.**
+- **Todo string de UI en `_()` o `{% trans %}`.**
+- **Lógica de negocio solo en clases `*Service`**, nunca en vistas o admin.
+- **`AppConfig` con `default_auto_field = "django.db.models.BigAutoField"`** en `apps.py`.
