@@ -50,7 +50,6 @@ def solicitar_acceso(request):
                 email=email,
                 first_name=erp_user.get("name") or "",
                 erp_employee_id=str(erp_user.get("login")),
-                role=User.Role.TRANSLATOR,
                 is_active=True,
                 is_staff=True,
             )
