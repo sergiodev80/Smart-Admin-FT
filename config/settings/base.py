@@ -191,11 +191,6 @@ UNFOLD = {
                         "link": "/admin/permissions/role/",
                     },
                     {
-                        "title": _("Roles de usuario"),
-                        "icon": "manage_accounts",
-                        "link": "/admin/permissions/userrole/",
-                    },
-                    {
                         "title": _("Permisos por objeto"),
                         "icon": "lock",
                         "link": "/admin/permissions/objectpermission/",
