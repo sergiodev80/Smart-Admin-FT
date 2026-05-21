@@ -7,5 +7,9 @@ class ConfigConfig(AppConfig):
     name = "apps.config"
     verbose_name = _("Configuración")
 
+    plugin_urls = []
+    plugin_middleware = []
+    plugin_settings = {}
+
     def ready(self):
         import apps.config.signals  # noqa: F401

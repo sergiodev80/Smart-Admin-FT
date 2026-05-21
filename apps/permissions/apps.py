@@ -7,5 +7,9 @@ class PermissionsConfig(AppConfig):
     name = "apps.permissions"
     verbose_name = _("Permisos y roles")
 
+    plugin_urls = []
+    plugin_middleware = []
+    plugin_settings = {}
+
     def ready(self):
         import apps.permissions.signals  # noqa: F401
