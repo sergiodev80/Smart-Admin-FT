@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from config.plugins import autoregister_plugins, _insert_middleware
 
@@ -43,86 +43,71 @@ class TestInsertMiddleware(TestCase):
         self.assertEqual(middleware[-1], "apps.audit.middleware.AuditMiddleware")
 
 
-class TestAutoregisterPlugins(TestCase):
-    def _make_config(self, name, plugin_urls=None, plugin_middleware=None, plugin_settings=None):
-        config = MagicMock()
-        config.name = name
-        if plugin_urls is not None:
-            config.plugin_urls = plugin_urls
-        else:
-            del config.plugin_urls
-        if plugin_middleware is not None:
-            config.plugin_middleware = plugin_middleware
-        else:
-            del config.plugin_middleware
-        if plugin_settings is not None:
-            config.plugin_settings = plugin_settings
-        else:
-            del config.plugin_settings
-        return config
+class FakeConfigWithUrls:
+    name = "apps.notifications"
+    plugin_urls = [{"prefix": "admin/notifications/", "urlconf": "apps.notifications.urls"}]
 
+
+class FakeConfigWithMiddleware:
+    name = "apps.audit"
+    plugin_middleware = [{
+        "middleware": "apps.audit.middleware.AuditMiddleware",
+        "insert_after": "AuthenticationMiddleware",
+    }]
+
+
+class FakeConfigWithSettings:
+    name = "apps.notifications"
+    plugin_settings = {"WEBHOOK_SECRET": "from-plugin"}
+
+
+class FakeConfigEmpty:
+    name = "apps.core"
+
+
+class TestAutoregisterPlugins(TestCase):
     def test_urls_registered(self):
-        fake_config = self._make_config(
-            "notifications",
-            plugin_urls=[{"prefix": "admin/notifications/", "urlconf": "apps.notifications.urls"}],
-        )
         middleware = []
         settings_module = {}
 
-        with patch("config.plugins.django_apps.get_app_config", return_value=fake_config):
+        with patch("config.plugins._load_app_config_class", return_value=FakeConfigWithUrls):
             urls = autoregister_plugins(["apps.notifications"], middleware, settings_module)
 
         self.assertEqual(len(urls), 1)
         self.assertEqual(urls[0]["prefix"], "admin/notifications/")
 
     def test_middleware_inserted(self):
-        fake_config = self._make_config(
-            "audit",
-            plugin_middleware=[{
-                "middleware": "apps.audit.middleware.AuditMiddleware",
-                "insert_after": "AuthenticationMiddleware",
-            }],
-        )
         middleware = ["django.contrib.auth.middleware.AuthenticationMiddleware"]
         settings_module = {}
 
-        with patch("config.plugins.django_apps.get_app_config", return_value=fake_config):
+        with patch("config.plugins._load_app_config_class", return_value=FakeConfigWithMiddleware):
             autoregister_plugins(["apps.audit"], middleware, settings_module)
 
         self.assertIn("apps.audit.middleware.AuditMiddleware", middleware)
 
     def test_settings_not_overwrite(self):
-        fake_config = self._make_config(
-            "notifications",
-            plugin_settings={"WEBHOOK_SECRET": "from-plugin"},
-        )
         middleware = []
         settings_module = {"WEBHOOK_SECRET": "already-set"}
 
-        with patch("config.plugins.django_apps.get_app_config", return_value=fake_config):
+        with patch("config.plugins._load_app_config_class", return_value=FakeConfigWithSettings):
             autoregister_plugins(["apps.notifications"], middleware, settings_module)
 
         self.assertEqual(settings_module["WEBHOOK_SECRET"], "already-set")
 
     def test_settings_injected_when_missing(self):
-        fake_config = self._make_config(
-            "notifications",
-            plugin_settings={"WEBHOOK_SECRET": "from-plugin"},
-        )
         middleware = []
         settings_module = {}
 
-        with patch("config.plugins.django_apps.get_app_config", return_value=fake_config):
+        with patch("config.plugins._load_app_config_class", return_value=FakeConfigWithSettings):
             autoregister_plugins(["apps.notifications"], middleware, settings_module)
 
         self.assertEqual(settings_module["WEBHOOK_SECRET"], "from-plugin")
 
     def test_app_without_attributes_no_error(self):
-        fake_config = self._make_config("core")
         middleware = []
         settings_module = {}
 
-        with patch("config.plugins.django_apps.get_app_config", return_value=fake_config):
+        with patch("config.plugins._load_app_config_class", return_value=FakeConfigEmpty):
             urls = autoregister_plugins(["apps.core"], middleware, settings_module)
 
         self.assertEqual(urls, [])
@@ -130,6 +115,6 @@ class TestAutoregisterPlugins(TestCase):
         self.assertEqual(settings_module, {})
 
     def test_unknown_app_skipped(self):
-        with patch("config.plugins.django_apps.get_app_config", side_effect=LookupError):
+        with patch("config.plugins._load_app_config_class", return_value=None):
             urls = autoregister_plugins(["apps.nonexistent"], [], {})
         self.assertEqual(urls, [])

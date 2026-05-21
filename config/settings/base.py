@@ -239,3 +239,9 @@ UNFOLD = {
         ],
     },
 }
+
+# --- Plugin auto-registration ---
+# Must run after INSTALLED_APPS and MIDDLEWARE are fully defined.
+from config.plugins import autoregister_plugins  # noqa: E402
+
+_plugin_urls = autoregister_plugins(INSTALLED_APPS, MIDDLEWARE, globals())
