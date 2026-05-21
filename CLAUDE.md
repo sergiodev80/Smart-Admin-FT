@@ -15,9 +15,23 @@
 
 ```
 apps/
-  core/          — User model, acceso al sistema, solicitud de acceso
-  <nueva-app>/   — Agregar apps específicas del proyecto aquí
+  core/          — Infraestructura: User model, auth, contexto Unfold (nunca opcional)
+  config/        — Plugin core: settings dinámicos editables desde el admin
+  permissions/   — Plugin core: roles y permisos granulares
+  audit/         — Plugin core: registro de auditoría
+  notifications/ — Plugin core: notificaciones in-app, email, webhook
+  <nueva-app>/   — Plugin de dominio: específico del proyecto
 ```
+
+### Clasificación de apps
+
+| Tipo | Apps | Descripción |
+|------|------|-------------|
+| **Infraestructura** | `core` | Nunca opcional. Todo depende de ella. No es un plugin. |
+| **Plugin core** | `config`, `permissions`, `audit`, `notifications` | Incluidas en el template, reutilizables en cualquier proyecto. Opcionales. |
+| **Plugin de dominio** | cualquier app nueva | Específica del proyecto. Creada con el skill `/new-app`. |
+
+**Regla:** Si quitar la app rompe otras apps → infraestructura. Si solo elimina funcionalidad propia → plugin.
 
 ### Responsabilidad de cada componente
 
@@ -113,6 +127,39 @@ que carga automáticamente las guías de componentes Unfold del proyecto.
 
 ---
 
+## Plugin System
+
+Toda app de dominio o plugin core se activa con una sola línea en `LOCAL_APPS`. URLs, middleware y settings propios se auto-registran desde el `AppConfig` de la app — sin tocar `config/urls.py` ni `MIDDLEWARE` manualmente.
+
+### Contrato del AppConfig (toda app nueva debe declarar estos atributos)
+
+```python
+class MiAppConfig(AppConfig):
+    name = "apps.mi_app"
+
+    plugin_urls = [
+        # URLs propias fuera del admin — se registran automáticamente antes de admin/
+        {"prefix": "admin/mi-app/", "urlconf": "apps.mi_app.urls"},
+    ]
+    plugin_middleware = [
+        # Middleware propio con orden explícito
+        {"middleware": "apps.mi_app.middleware.MiMiddleware",
+         "insert_after": "django.contrib.auth.middleware.AuthenticationMiddleware"},
+    ]
+    plugin_settings = {
+        # Settings leídos de env vars, inyectados solo si no existen ya
+        "MI_SETTING": os.getenv("MI_SETTING", "default"),
+    }
+```
+
+Atributos vacíos (`[]`, `{}`) también deben declararse — son el contrato explícito de la app.
+
+### Activar una app
+
+1. Copiar la carpeta en `apps/`
+2. Añadir `"apps.mi_app"` en `LOCAL_APPS` en `config/settings/base.py`
+3. Ejecutar `make migrate`
+
 ## Apps v2 — Módulos opcionales
 
 Activar cualquier app v2:
@@ -144,10 +191,7 @@ class MiModelAdmin(AuditMixin, ModelAdmin):
     ...
 ```
 
-Para rastrear navegación, agregar a `MIDDLEWARE`:
-```python
-"apps.audit.middleware.AuditMiddleware",
-```
+Para rastrear navegación, el `AuditMiddleware` se registra automáticamente vía el plugin system al activar la app.
 
 ### apps/notifications — Notificaciones (in-app + email + webhook)
 
