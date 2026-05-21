@@ -1,8 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin, TabularInline
 
 from .models import ObjectPermission, Role, UserRole
+
+# Role replaces Group when this app is active — hide the built-in Group from admin.
+admin.site.unregister(Group)
 
 
 class UserRoleInline(TabularInline):
