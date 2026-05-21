@@ -35,7 +35,7 @@ apps/
 
 ### Responsabilidad de cada componente
 
-- **core**: modelo `User` con roles (`admin`, `pm`, `translator`, `reviewer`), flujo de solicitud de acceso, contexto Unfold. Extender roles según necesidad del proyecto.
+- **core**: modelo `User` (sin roles hardcodeados), flujo de solicitud de acceso, contexto Unfold. Los roles se gestionan desde `apps.permissions` — cargar con `make loaddata`.
 
 ## Reglas que nunca se rompen
 
