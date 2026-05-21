@@ -8,6 +8,9 @@ class SiteConfigForm(forms.ModelForm):
     class Meta:
         model = SiteConfig
         fields = ("key", "value_type", "value", "description", "is_public")
+        widgets = {
+            "description": forms.TextInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
