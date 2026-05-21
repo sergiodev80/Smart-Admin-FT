@@ -75,10 +75,10 @@ digraph new_app {
 >
 > **Regla por defecto:** preferir Services. Las señales se disparan en contextos inesperados (fixtures, migrations) y son difíciles de testear. Solo usar señal cuando la lógica deba ocurrir en **absolutamente todos los contextos sin excepción**.
 
-**7. Vistas custom**
+**7. Vistas custom y URLs**
 > "¿Necesita vistas propias fuera del admin de Unfold, o solo admin?"
-> A) Solo admin de Unfold
-> B) También vistas en `/<app-name>/`
+> A) Solo admin de Unfold — sin `plugin_urls`
+> B) También vistas propias — se registran en `plugin_urls` del `AppConfig`, no en `config/urls.py`
 
 **8. Diseño del admin**
 > "¿Cómo quieres ver los datos en el admin?"
@@ -121,8 +121,14 @@ Reuse the `_Table` helper from `apps/core/dashboard.py`.
 Pass `data=chart_data` where `chart_data` is `json.dumps({labels: [...], datasets: [...]})`.
 Unfold includes Chart.js — do NOT add a CDN script tag.
 
-**URLs under `/admin/` must be registered BEFORE `admin.site.urls`**
-Django's admin URL pattern consumes all of `/admin/`. Any custom URL under that prefix must appear before `path("admin/", admin.site.urls)` in `config/urls.py`.
+**URLs se declaran en `AppConfig`, no en `config/urls.py`**
+Desde el plugin system, las URLs propias de la app van en `plugin_urls` del `AppConfig`:
+```python
+plugin_urls = [
+    {"prefix": "admin/mi-app/", "urlconf": "apps.mi_app.urls"},
+]
+```
+El motor `config/plugins.py` las registra automáticamente antes de `admin.site.urls`. Nunca tocar `config/urls.py` para agregar URLs de una nueva app.
 
 **Admin views require `@staff_member_required`**
 Not `@login_required`. Views under `/admin/` must check `is_staff=True`.
@@ -168,7 +174,10 @@ def dashboard_callback(request, context):
 
 **LOCAL_APPS:** agregar "apps.<name>" en config/settings/base.py
 
-**URLs:** sí/no — registrar ANTES de admin.site.urls en config/urls.py
+**Plugin contract** (declarar siempre en `AppConfig`, aunque estén vacíos):
+- `plugin_urls`: rutas propias fuera del admin — se registran automáticamente antes de `admin.site.urls`
+- `plugin_middleware`: middleware propio con `insert_after` para controlar el orden
+- `plugin_settings`: settings leídos de env vars, inyectados solo si no existen ya
 
 **Data migrations:** sí/no — config keys iniciales
 
@@ -196,4 +205,5 @@ def dashboard_callback(request, context):
 - All `ModelAdmin` inherit from `unfold.admin.ModelAdmin`
 - Business logic only in `*Service` classes — never in views or admin
 - `AppConfig` with `default_auto_field = "django.db.models.BigAutoField"` in `apps.py`
+- Declarar siempre `plugin_urls = []`, `plugin_middleware = []`, `plugin_settings = {}` en el `AppConfig` — aunque estén vacíos, son el contrato del plugin system
 - Translations in `locale/es/` and `locale/en/` (project root)
