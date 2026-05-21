@@ -155,6 +155,7 @@ UNFOLD = {
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
     "SHOW_LANGUAGES": True,
+    "DASHBOARD_CALLBACK": "apps.core.dashboard.dashboard_callback",
     "COLORS": {
         "primary": {
             "50": "239 246 255",
