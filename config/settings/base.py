@@ -35,6 +35,7 @@ LOCAL_APPS = [
     "apps.audit",
     "apps.config",
     "apps.permissions",
+    "apps.clientes",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
