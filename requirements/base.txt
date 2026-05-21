@@ -5,3 +5,4 @@ django-unfold>=0.40
 mysqlclient>=2.2
 gunicorn>=21.0
 requests>=2.31
+django-htmx>=1.17
