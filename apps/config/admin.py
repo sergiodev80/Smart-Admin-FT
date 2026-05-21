@@ -10,11 +10,19 @@ class SiteConfigAdmin(ModelAdmin):
     list_display = ("key", "value_type", "value", "is_public", "description")
     list_filter = ("value_type", "is_public")
     search_fields = ("key", "description")
-    readonly_fields = ("cast_preview",)
+    readonly_fields = ("key", "value_type", "cast_preview")
     fieldsets = (
         (None, {"fields": ("key", "value_type", "value", "cast_preview")}),
         (_("Metadatos"), {"fields": ("description", "is_public")}),
     )
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return self.readonly_fields
+        return ("cast_preview",)
 
     @admin.display(description=_("valor interpretado"))
     def cast_preview(self, obj):
