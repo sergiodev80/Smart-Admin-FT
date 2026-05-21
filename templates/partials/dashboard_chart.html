@@ -1,0 +1,44 @@
+{% load i18n %}
+{# PROYECTO: reemplaza chartData y chartLabels con datos reales de tu app #}
+{# Ejemplo: pasa los datos desde dashboard_callback en context["chart_data"] #}
+<div class="rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+      {% trans "Actividad (ejemplo)" %}
+    </h3>
+    <span class="text-xs bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 px-2 py-0.5 rounded-full">
+      {% trans "Placeholder — reemplazar con datos reales" %}
+    </span>
+  </div>
+  <canvas id="dashboardChart" height="80"></canvas>
+</div>
+
+<script>
+  // PROYECTO: reemplaza estos arrays con datos reales desde el contexto Django
+  // Ejemplo: const chartLabels = {{ chart_labels|safe }};
+  const chartLabels = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  const chartData = [12, 19, 8, 15, 22, 6, 10];
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById("dashboardChart").getContext("2d");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: "Actividad",
+          data: chartData,
+          backgroundColor: "rgba(59, 130, 246, 0.5)",
+          borderColor: "rgba(59, 130, 246, 1)",
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      }
+    });
+  });
+</script>

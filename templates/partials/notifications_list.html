@@ -1,0 +1,24 @@
+{% load i18n %}
+<div id="notifications-dropdown"
+     class="absolute right-0 mt-2 w-80 rounded-lg shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 z-50">
+  <div class="p-3 border-b border-gray-200 dark:border-gray-700">
+    <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">{% trans "Notificaciones" %}</span>
+  </div>
+  <ul class="max-h-72 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700">
+    {% for n in notifications %}
+    <li class="p-3 hover:bg-gray-50 dark:hover:bg-gray-700">
+      <p class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{{ n.title }}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{{ n.body|truncatechars:60 }}</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ n.created_at|timesince }} {% trans "atrás" %}</p>
+    </li>
+    {% empty %}
+    <li class="p-4 text-sm text-center text-gray-400 dark:text-gray-500">{% trans "Sin notificaciones nuevas" %}</li>
+    {% endfor %}
+  </ul>
+  <div class="p-2 border-t border-gray-200 dark:border-gray-700">
+    <a href="{% url 'admin:notifications_notification_changelist' %}"
+       class="block text-center text-xs text-blue-600 dark:text-blue-400 hover:underline py-1">
+      {% trans "Ver todas" %}
+    </a>
+  </div>
+</div>

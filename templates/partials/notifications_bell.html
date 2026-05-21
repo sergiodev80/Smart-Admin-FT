@@ -1,0 +1,21 @@
+{% load i18n %}
+<div class="relative flex items-center ml-2"
+     x-data="{ open: false }"
+     @click.outside="open = false">
+
+  <button @click="open = !open"
+          hx-get="{% url 'notifications_unread_list' %}"
+          hx-target="#notifications-dropdown-container"
+          hx-swap="innerHTML"
+          hx-trigger="click"
+          class="relative flex items-center justify-center w-9 h-9 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="{% trans 'Notificaciones' %}">
+    {% include "partials/notifications_badge.html" %}
+  </button>
+
+  <div id="notifications-dropdown-container"
+       x-show="open"
+       x-cloak
+       class="absolute right-0 top-10 z-50">
+  </div>
+</div>

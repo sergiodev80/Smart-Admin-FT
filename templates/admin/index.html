@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+{% load i18n unfold %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+  {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+
+{# Stat Cards — inline style para grid de 3 columnas (Unfold no compila clases Tailwind custom) #}
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem;">
+  {% for card in stat_cards %}
+    {% component "unfold/components/card.html" with icon=card.icon %}
+      {% component "unfold/components/title.html" %}{{ card.value }}{% endcomponent %}
+      {% component "unfold/components/text.html" %}{{ card.title }} — {{ card.description }}{% endcomponent %}
+    {% endcomponent %}
+  {% endfor %}
+</div>
+
+{# Chart slot — Chart.js está incluido en Unfold, no se necesita CDN #}
+{# PROYECTO: actualiza chart_data en apps/core/dashboard.py con datos reales #}
+<div style="margin-bottom:2rem;">
+  {% component "unfold/components/card.html" with title=_("Actividad (ejemplo)") %}
+    {% component "unfold/components/chart/bar.html" with data=chart_data height="120" %}{% endcomponent %}
+    {% component "unfold/components/text.html" %}
+      {% trans "Placeholder — reemplazar con datos reales en apps/core/dashboard.py" %}
+    {% endcomponent %}
+  {% endcomponent %}
+</div>
+
+{# List widgets — 2 columnas #}
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
+
+  {% component "unfold/components/card.html" with title=_("Últimos usuarios") %}
+    {% component "unfold/components/table.html" with table=users_table card_included=1 %}{% endcomponent %}
+  {% endcomponent %}
+
+  {% component "unfold/components/card.html" with title=_("Auditoría reciente") %}
+    {% component "unfold/components/table.html" with table=audit_table card_included=1 %}{% endcomponent %}
+  {% endcomponent %}
+
+</div>
+
+{% endblock %}

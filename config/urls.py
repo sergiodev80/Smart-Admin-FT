@@ -4,6 +4,7 @@ from django.urls import include, path
 
 from apps.core.forms import PlatformAuthenticationForm
 from apps.core.views import solicitar_acceso
+from config.settings.base import _plugin_urls
 
 admin.site.login_form = PlatformAuthenticationForm
 
@@ -13,7 +14,12 @@ urlpatterns = [
     path("admin/password_reset/done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
     path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
     path("reset/done/", auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
+    # Plugin URLs must come before admin/ to avoid being caught by admin's catch-all
+] + [
+    path(u["prefix"], include(u["urlconf"]))
+    for u in _plugin_urls
+] + [
     path("admin/", admin.site.urls),
     path("solicitar-acceso/", solicitar_acceso, name="request_access"),
-    path("traducciones/", include("apps.translations.urls")),
+    # Agregar URLs fijas específicas del proyecto aquí
 ]

@@ -13,27 +13,27 @@ build:
 	$(DC) build
 
 logs:
-	$(DC) logs -f app_web_dev
+	$(DC) logs -f web_dev
 
 shell:
-	$(DC) exec app_web_dev python manage.py shell
+	$(DC) exec web_dev python manage.py shell
 
 migrate:
-	$(DC) exec app_web_dev python manage.py migrate
+	$(DC) exec web_dev python manage.py migrate
 
 makemigrations:
-	$(DC) exec app_web_dev python manage.py makemigrations
+	$(DC) exec web_dev python manage.py makemigrations
 
 test:
-	$(DC) exec app_web_dev python manage.py test
+	$(DC) exec web_dev python manage.py test --settings=config.settings.test
 
 messages:
-	$(DC) exec app_web_dev python manage.py makemessages -l es -l en
+	$(DC) exec web_dev python manage.py makemessages -l es -l en
 
 compilemessages:
-	$(DC) exec app_web_dev python manage.py compilemessages
+	$(DC) exec web_dev python manage.py compilemessages
 
 createsuperuser:
-	$(DC) exec app_web_dev python manage.py createsuperuser
+	$(DC) exec web_dev python manage.py createsuperuser
 
 .PHONY: up upd down build logs shell migrate makemigrations test messages compilemessages createsuperuser

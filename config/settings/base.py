@@ -4,6 +4,7 @@ Reemplazar los valores TODO antes de usar en producción.
 """
 from pathlib import Path
 from dotenv import load_dotenv
+from django.utils.translation import gettext_lazy as _
 import os
 
 load_dotenv()
@@ -24,17 +25,23 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_htmx",
 ]
 
 LOCAL_APPS = [
     "apps.core",
-    # Agregar apps del proyecto aquí
+    # --- v2 optional apps — uncomment to activate ---
+    "apps.notifications",
+    "apps.audit",
+    "apps.config",
+    "apps.permissions",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "apps.core.middleware.CookieLanguageMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -148,6 +155,7 @@ UNFOLD = {
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
     "SHOW_LANGUAGES": True,
+    "DASHBOARD_CALLBACK": "apps.core.dashboard.dashboard_callback",
     "COLORS": {
         "primary": {
             "50": "239 246 255",
@@ -165,7 +173,62 @@ UNFOLD = {
     },
     "SIDEBAR": {
         "show_search": True,
-        "show_all_applications": True,
-        "navigation": [],
+        "show_all_applications": False,
+        "navigation": [
+            {
+                "title": _("Administración"),
+                "separator": False,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Usuarios"),
+                        "icon": "group",
+                        "link": "/admin/core/user/",
+                    },
+                    {
+                        "title": _("Roles"),
+                        "icon": "shield_person",
+                        "link": "/admin/permissions/role/",
+                    },
+                    {
+                        "title": _("Roles de usuario"),
+                        "icon": "manage_accounts",
+                        "link": "/admin/permissions/userrole/",
+                    },
+                    {
+                        "title": _("Permisos por objeto"),
+                        "icon": "lock",
+                        "link": "/admin/permissions/objectpermission/",
+                    },
+                    {
+                        "title": _("Notificaciones"),
+                        "icon": "notifications",
+                        "link": "/admin/notifications/notification/",
+                    },
+                    {
+                        "title": _("Endpoints webhook"),
+                        "icon": "webhook",
+                        "link": "/admin/notifications/webhookendpoint/",
+                    },
+                    {
+                        "title": _("Configuraciones del sitio"),
+                        "icon": "settings",
+                        "link": "/admin/config/siteconfig/",
+                    },
+                    {
+                        "title": _("Registros de auditoría"),
+                        "icon": "history",
+                        "link": "/admin/audit/auditlog/",
+                    },
+                ],
+            },
+            # --- Agregar secciones del proyecto aquí ---
+        ],
     },
 }
+
+# --- Plugin auto-registration ---
+# Must run after INSTALLED_APPS and MIDDLEWARE are fully defined.
+from config.plugins import autoregister_plugins  # noqa: E402
+
+_plugin_urls = autoregister_plugins(INSTALLED_APPS, MIDDLEWARE, globals())

@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5434:5432"
     networks:
       - app_dev_network
 
@@ -33,7 +33,7 @@ services:
       - /app/static
       - /app/staticfiles
     ports:
-      - "8001:8000"
+      - "8002:8000"
     depends_on:
       - db_dev
     networks:
