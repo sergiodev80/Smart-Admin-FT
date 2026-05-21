@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "name": "admin",
-      "description": "Administrador del sistema",
+      "description": "Acceso total al sistema",
       "permissions": []
     }
   },
@@ -12,8 +12,8 @@
     "model": "permissions.role",
     "pk": 2,
     "fields": {
-      "name": "pm",
-      "description": "Project Manager",
+      "name": "staff",
+      "description": "Acceso operativo — puede gestionar contenido",
       "permissions": []
     }
   },
@@ -21,17 +21,8 @@
     "model": "permissions.role",
     "pk": 3,
     "fields": {
-      "name": "translator",
-      "description": "Traductor",
-      "permissions": []
-    }
-  },
-  {
-    "model": "permissions.role",
-    "pk": 4,
-    "fields": {
-      "name": "reviewer",
-      "description": "Revisor",
+      "name": "viewer",
+      "description": "Solo lectura — no puede crear ni editar",
       "permissions": []
     }
   }
