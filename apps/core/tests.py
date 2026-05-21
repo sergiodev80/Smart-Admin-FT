@@ -7,20 +7,19 @@ from .models import User
 
 
 class UserModelTest(TestCase):
-    def test_default_role_is_translator(self):
+    def test_str_includes_username(self):
         user = User.objects.create_user(username="u1", password="pass")
-        self.assertEqual(user.role, User.Role.TRANSLATOR)
-
-    def test_str_includes_role(self):
-        user = User.objects.create_user(username="u1", password="pass", role=User.Role.PM)
         self.assertIn("u1", str(user))
-        self.assertIn("Project Manager", str(user))
 
-    def test_all_roles_valid(self):
-        roles = [User.Role.ADMIN, User.Role.PM, User.Role.TRANSLATOR, User.Role.REVIEWER]
-        for role in roles:
-            user = User.objects.create_user(username=f"user_{role}", password="pass", role=role)
-            self.assertEqual(user.role, role)
+    def test_erp_employee_id_optional(self):
+        user = User.objects.create_user(username="u2", password="pass")
+        self.assertIsNone(user.erp_employee_id)
+
+    def test_erp_employee_id_can_be_set(self):
+        user = User.objects.create_user(
+            username="u3", password="pass", erp_employee_id="EMP001"
+        )
+        self.assertEqual(user.erp_employee_id, "EMP001")
 
 
 class EmailOrUsernameBackendTest(TestCase):
