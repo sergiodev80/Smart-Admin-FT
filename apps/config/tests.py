@@ -5,12 +5,12 @@ class SiteConfigModelTest(TestCase):
     def test_create_str_config(self):
         from apps.config.models import SiteConfig
         cfg = SiteConfig.objects.create(
-            key="site_name",
+            key="test_site_name",
             value="Acme Corp",
             value_type="str",
             description="Nombre del sitio",
         )
-        self.assertEqual(str(cfg), "site_name")
+        self.assertEqual(str(cfg), "test_site_name")
 
     def test_create_int_config(self):
         from apps.config.models import SiteConfig
