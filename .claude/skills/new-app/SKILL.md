@@ -60,9 +60,20 @@ digraph new_app {
 > Estos se crearán en un data migration `000X_default_config.py`.
 
 **6. Señales vs Service**
-> "¿Hay lógica que deba ejecutarse automáticamente al guardar/crear/eliminar un modelo?"
-> - Sí → va en `signals.py`
-> - No → toda la lógica va en `<App>Service` en `services.py`
+> "¿Hay lógica que deba ejecutarse al guardar/crear/eliminar un modelo?"
+>
+> Elige según este criterio:
+>
+> | Situación | Usa |
+> |-----------|-----|
+> | Debe ocurrir **siempre**, sin importar quién guarda (admin, API, shell, migration) y sin condiciones | `signals.py` |
+> | Tiene condiciones, necesita contexto, o solo ocurre cuando el código lo llama explícitamente | `services.py` |
+>
+> **Ejemplos:**
+> - "Al borrar una Task, limpiar su caché" → señal (siempre, sin condiciones)
+> - "Al asignar una Task a un usuario, enviarle notificación" → service (solo si cambió el asignado, requiere contexto)
+>
+> **Regla por defecto:** preferir Services. Las señales se disparan en contextos inesperados (fixtures, migrations) y son difíciles de testear. Solo usar señal cuando la lógica deba ocurrir en **absolutamente todos los contextos sin excepción**.
 
 **7. Vistas custom**
 > "¿Necesita vistas propias fuera del admin de Unfold, o solo admin?"
