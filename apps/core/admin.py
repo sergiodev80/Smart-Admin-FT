@@ -7,15 +7,15 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(ModelAdmin, BaseUserAdmin):
-    list_display = ("username", "email", "role", "is_staff", "is_active", "erp_employee_id")
+    list_display = ("username", "email", "is_staff", "is_active", "erp_employee_id")
     list_display_links = ("username",)
-    list_filter = ("role", "is_staff", "is_active")
+    list_filter = ("is_staff", "is_active")
     search_fields = ("username", "email", "erp_employee_id")
     compressed_fields = True
     warn_unsaved_change = True
     fieldsets = BaseUserAdmin.fieldsets + (
-        ("Información adicional", {"fields": ("role", "erp_employee_id")}),
+        ("Información adicional", {"fields": ("erp_employee_id",)}),
     )
     add_fieldsets = BaseUserAdmin.add_fieldsets + (
-        ("Información adicional", {"fields": ("role", "erp_employee_id")}),
+        ("Información adicional", {"fields": ("erp_employee_id",)}),
     )
