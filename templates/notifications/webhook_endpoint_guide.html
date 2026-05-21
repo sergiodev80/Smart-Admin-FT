@@ -1,0 +1,61 @@
+{% load i18n %}
+<div class="mt-6 rounded-lg border border-base-200 dark:border-base-700 overflow-hidden">
+  <div class="px-5 py-3 bg-base-50 dark:bg-base-800 border-b border-base-200 dark:border-base-700 flex items-center gap-2">
+    <span class="material-symbols-outlined text-base text-primary-600 dark:text-primary-400">integration_instructions</span>
+    <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">{% trans "Guía de integración" %}</span>
+  </div>
+
+  <div class="divide-y divide-base-200 dark:divide-base-700">
+
+    {# Sección 1: Cómo disparar #}
+    <div class="px-5 py-4">
+      <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
+        {% trans "1 — Disparar desde código Python" %}
+      </p>
+      <pre class="text-xs bg-base-100 dark:bg-base-900 rounded-default p-4 overflow-x-auto text-gray-800 dark:text-gray-200 leading-relaxed">from apps.notifications.services import NotificationService
+
+NotificationService.send(
+    user=user,
+    title=<span class="text-green-600 dark:text-green-400">"Asunto"</span>,
+    body=<span class="text-green-600 dark:text-green-400">"Mensaje"</span>,
+    channels=[<span class="text-green-600 dark:text-green-400">"webhook"</span>],
+    payload={<span class="text-green-600 dark:text-green-400">"key"</span>: <span class="text-green-600 dark:text-green-400">"value"</span>},  <span class="text-gray-400"># datos extra opcionales</span>
+)</pre>
+    </div>
+
+    {# Sección 2: POST enviado #}
+    <div class="px-5 py-4">
+      <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
+        {% trans "2 — POST que recibirá tu URL" %}
+      </p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+        {% trans "Headers:" %}
+        <code class="bg-base-100 dark:bg-base-900 px-1.5 py-0.5 rounded text-xs">Content-Type: application/json</code>
+        <code class="bg-base-100 dark:bg-base-900 px-1.5 py-0.5 rounded text-xs ml-1">X-Signature: sha256=&lt;hmac&gt;</code>
+      </p>
+      <pre class="text-xs bg-base-100 dark:bg-base-900 rounded-default p-4 overflow-x-auto text-gray-800 dark:text-gray-200 leading-relaxed">{
+  <span class="text-blue-600 dark:text-blue-400">"title"</span>: <span class="text-green-600 dark:text-green-400">"Asunto"</span>,
+  <span class="text-blue-600 dark:text-blue-400">"body"</span>:  <span class="text-green-600 dark:text-green-400">"Mensaje"</span>,
+  <span class="text-blue-600 dark:text-blue-400">"key"</span>:   <span class="text-green-600 dark:text-green-400">"value"</span>
+}</pre>
+    </div>
+
+    {# Sección 3: Verificar firma #}
+    <div class="px-5 py-4">
+      <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
+        {% trans "3 — Verificar la firma HMAC en tu receptor" %}
+      </p>
+      <pre class="text-xs bg-base-100 dark:bg-base-900 rounded-default p-4 overflow-x-auto text-gray-800 dark:text-gray-200 leading-relaxed">import hmac, hashlib
+
+def verify_signature(body_bytes: bytes, secret: str, header: str) -> bool:
+    expected = <span class="text-green-600 dark:text-green-400">"sha256="</span> + hmac.new(
+        secret.encode(), body_bytes, hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, header)</pre>
+      <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">
+        {% trans "Si no se configura un secreto, el header X-Signature se envía vacío y no debe verificarse." %}
+      </p>
+    </div>
+
+  </div>
+</div>
