@@ -7,7 +7,7 @@ from .models import SiteConfig
 
 @admin.register(SiteConfig)
 class SiteConfigAdmin(ModelAdmin):
-    list_display = ("key", "value_type", "value", "is_public", "description")
+    list_display = ("key", "is_public", "description", "value")
     list_filter = ("value_type", "is_public")
     search_fields = ("key", "description")
     readonly_fields = ("key", "value_type", "cast_preview")
