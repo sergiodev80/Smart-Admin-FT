@@ -1,0 +1,45 @@
+{% load i18n %}
+{#
+  Tabs de filtro con conteos cargados async via HTMX.
+
+  Parámetros:
+    tabs — list of dict (requerido):
+      label      — string: texto del tab
+      url        — string: URL al hacer click
+      active     — bool: tab activo actualmente
+      count_url  — string (opcional): URL HTMX que retorna solo el número
+      count_type — string (opcional): color del badge
+                   "success" | "warning" | "danger" | "info" | "neutral" (default)
+
+  Uso:
+    {% component "unfold/components/filter_tabs.html" with tabs=tabs %}{% endcomponent %}
+
+  Vista de conteo (retorna solo el número como texto plano):
+    def mi_count_view(request):
+        return HttpResponse(str(MiModelo.objects.filter(...).count()))
+#}
+
+<nav class="bg-base-100 dark:bg-white/[.06] flex flex-row font-medium gap-1 p-1 rounded-default text-sm md:w-auto"
+     aria-label="{% trans 'Filtros' %}">
+  {% for tab in tabs %}
+    <a href="{{ tab.url }}"
+       class="flex flex-row gap-1.5 font-medium whitespace-nowrap items-center px-2.5 py-[5px] rounded-default
+              hover:bg-base-700/[.06] dark:hover:bg-white/[.06] transition-colors
+              {% if tab.active %}bg-white shadow-xs dark:bg-base-700 hover:bg-white dark:hover:bg-base-700{% endif %}">
+      {{ tab.label }}
+      {% if tab.count_url %}
+        <span
+          hx-get="{{ tab.count_url }}"
+          hx-trigger="load"
+          hx-swap="innerHTML"
+          class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-xs font-semibold
+                 {% if tab.count_type == 'success' %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400
+                 {% elif tab.count_type == 'warning' %}bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400
+                 {% elif tab.count_type == 'danger' %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
+                 {% elif tab.count_type == 'info' %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400
+                 {% else %}bg-base-200 text-gray-600 dark:bg-base-700 dark:text-gray-300{% endif %}"
+        >···</span>
+      {% endif %}
+    </a>
+  {% endfor %}
+</nav>
