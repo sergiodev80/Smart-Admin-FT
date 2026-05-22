@@ -1,0 +1,131 @@
+{% load i18n unfold %}
+{#
+  Dialog de confirmación reutilizable. Dos modos:
+  - Simple (default): título + mensaje + 2 botones
+  - Estricto: requiere escribir confirm_text para habilitar el botón
+
+  Parámetros:
+    title         — string (requerido)
+    body          — string (opcional)
+    confirm_label — string (default: "Confirmar")
+    cancel_label  — string (default: "Cancelar")
+    danger        — bool (default: False) — botón rojo si True
+    confirm_text  — string (opcional) — activa modo estricto
+    action_url    — string (opcional) — form action POST
+    hx_delete     — string (opcional) — hx-delete URL alternativa
+
+  Uso simple:
+    {% component "unfold/components/confirm_dialog.html"
+       with title=_("Eliminar usuario") body=_("No se puede deshacer.") danger=True action_url=url %}
+    {% endcomponent %}
+
+  Uso estricto:
+    {% component "unfold/components/confirm_dialog.html"
+       with title=_("Eliminar proyecto") confirm_text="mi-proyecto" danger=True action_url=url %}
+    {% endcomponent %}
+#}
+
+{% with confirm_label=confirm_label|default:_("Confirmar") %}
+{% with cancel_label=cancel_label|default:_("Cancelar") %}
+
+<div
+  x-data="{
+    input: '',
+    required: '{{ confirm_text|default:''|escapejs }}',
+    get canConfirm() {
+      return this.required === '' || this.input === this.required;
+    }
+  }"
+>
+  {# Header #}
+  <div class="flex items-start justify-between px-6 py-4 border-b border-base-200 dark:border-base-700">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-xl flex-shrink-0 {% if danger %}text-red-500{% else %}text-yellow-500{% endif %}">
+        {% if danger %}delete{% else %}warning{% endif %}
+      </span>
+      <h2 class="text-base font-semibold text-gray-900 dark:text-white">{{ title }}</h2>
+    </div>
+    <button
+      type="button"
+      x-on:click="openModal = false"
+      class="p-1.5 rounded-default text-gray-400 hover:bg-base-100 dark:hover:bg-base-800 transition-colors ml-4"
+    >
+      <span class="material-symbols-outlined text-xl leading-none">close</span>
+    </button>
+  </div>
+
+  {# Body #}
+  <div class="px-6 py-5">
+    {% if body %}
+      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">{{ body }}</p>
+    {% endif %}
+
+    {% if confirm_text %}
+      <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
+        {% blocktrans with text=confirm_text %}Escribe <strong>{{ text }}</strong> para confirmar.{% endblocktrans %}
+      </p>
+      <input
+        type="text"
+        x-model="input"
+        placeholder="{{ confirm_text }}"
+        class="w-full border border-base-200 dark:border-base-700 rounded-default px-3 py-2 text-sm bg-white dark:bg-base-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+        autocomplete="off"
+      >
+    {% endif %}
+  </div>
+
+  {# Footer #}
+  <div class="px-6 py-4 border-t border-base-200 dark:border-base-700 flex justify-end gap-3">
+    <button
+      type="button"
+      x-on:click="openModal = false"
+      class="px-4 py-2 text-sm font-medium rounded-default text-gray-600 dark:text-gray-300 hover:bg-base-100 dark:hover:bg-base-800 transition-colors"
+    >
+      {{ cancel_label }}
+    </button>
+
+    {% if action_url %}
+      <form method="post" action="{{ action_url }}" class="inline">
+        {% csrf_token %}
+        <button
+          type="submit"
+          :disabled="!canConfirm"
+          :class="canConfirm
+            ? '{% if danger %}bg-red-600 hover:bg-red-700{% else %}bg-primary-600 hover:bg-primary-700{% endif %} text-white'
+            : 'bg-gray-200 dark:bg-base-700 text-gray-400 cursor-not-allowed'"
+          class="px-4 py-2 text-sm font-medium rounded-default transition-colors"
+        >
+          {{ confirm_label }}
+        </button>
+      </form>
+    {% elif hx_delete %}
+      <button
+        type="button"
+        hx-delete="{{ hx_delete }}"
+        hx-confirm=""
+        :disabled="!canConfirm"
+        :class="canConfirm
+          ? '{% if danger %}bg-red-600 hover:bg-red-700{% else %}bg-primary-600 hover:bg-primary-700{% endif %} text-white'
+          : 'bg-gray-200 dark:bg-base-700 text-gray-400 cursor-not-allowed'"
+        class="px-4 py-2 text-sm font-medium rounded-default transition-colors"
+        x-on:click="if(canConfirm) openModal = false"
+      >
+        {{ confirm_label }}
+      </button>
+    {% else %}
+      <button
+        type="button"
+        :disabled="!canConfirm"
+        :class="canConfirm
+          ? '{% if danger %}bg-red-600 hover:bg-red-700{% else %}bg-primary-600 hover:bg-primary-700{% endif %} text-white'
+          : 'bg-gray-200 dark:bg-base-700 text-gray-400 cursor-not-allowed'"
+        class="px-4 py-2 text-sm font-medium rounded-default transition-colors"
+      >
+        {{ confirm_label }}
+      </button>
+    {% endif %}
+  </div>
+</div>
+
+{% endwith %}
+{% endwith %}
