@@ -305,6 +305,24 @@ widget=django_forms.TextInput(attrs={
 
 ---
 
+## Regla de aislamiento — NO tocar código fuera de `apps/<name>/`
+
+Durante la implementación de una app, el agente trabaja **exclusivamente** dentro de `apps/<name>/` y sus templates en `templates/<name>/`.
+
+Si la implementación necesita algo fuera de esa carpeta (ej: `apps/core/dashboard.py`, `config/settings/base.py`, `templates/admin/`, otro app), el agente **debe detenerse y pedir al usuario que lo haga**, explicando exactamente qué cambio se necesita y por qué.
+
+**Nunca** modificar sin aviso:
+- Otras apps (`apps/core/`, `apps/notifications/`, etc.)
+- `config/settings/base.py` (LOCAL_APPS, SIDEBAR, etc.)
+- `config/urls.py`
+- Templates globales fuera de `templates/<name>/`
+
+**Excepción:** Si el usuario aprueba explícitamente un cambio fuera de la app en esa misma conversación, se puede proceder — pero confirmar antes de ejecutar.
+
+**Razón:** Cambios no anunciados fuera del scope de la app rompen la integridad del proyecto y son difíciles de rastrear en code review.
+
+---
+
 ## Coding Rules (always apply)
 
 - Código (variables, funciones, clases, comentarios) en **inglés**
