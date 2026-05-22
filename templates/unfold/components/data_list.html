@@ -1,0 +1,95 @@
+{% load i18n %}
+{#
+  Lista de pares clave-valor para mostrar detalles de un objeto.
+
+  Parámetros:
+    items  — list of dict (requerido)
+    layout — "horizontal" (default) | "grid"
+
+  Estructura de cada item:
+    label      — string: etiqueta visible
+    value      — any: valor a mostrar
+    type       — "text" (default) | "badge" | "date" | "mono" | "link"
+    badge_type — "success" | "warning" | "danger" | "info" (solo si type="badge")
+    href       — string URL (solo si type="link")
+    empty      — string fallback si value es falsy (default "—")
+
+  Uso horizontal (default):
+    {% component "unfold/components/data_list.html" with items=detalle %}{% endcomponent %}
+
+  Uso grid:
+    {% component "unfold/components/data_list.html" with items=kpis layout="grid" %}{% endcomponent %}
+#}
+
+{% with layout=layout|default:"horizontal" %}
+
+{% if layout == "grid" %}
+  <dl class="grid grid-cols-2 gap-x-6 gap-y-5">
+    {% for item in items %}
+      {% with val=item.value|default:item.empty|default:"—" typ=item.type|default:"text" %}
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">
+          {{ item.label }}
+        </dt>
+        <dd>
+          {% if typ == "badge" %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+              {% if item.badge_type == 'success' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
+              {% elif item.badge_type == 'warning' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
+              {% elif item.badge_type == 'danger' %}bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
+              {% else %}bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400{% endif %}">
+              {{ val }}
+            </span>
+          {% elif typ == "mono" %}
+            <span class="font-mono text-xs text-gray-700 dark:text-gray-300">{{ val }}</span>
+          {% elif typ == "link" %}
+            <a href="{{ item.href }}" class="text-sm text-primary-600 dark:text-primary-400 hover:underline">{{ val }}</a>
+          {% elif typ == "date" %}
+            <time class="text-sm text-gray-700 dark:text-gray-300">{{ val }}</time>
+          {% else %}
+            <span class="text-sm text-gray-900 dark:text-white font-medium">{{ val }}</span>
+          {% endif %}
+        </dd>
+      </div>
+      {% endwith %}
+    {% empty %}
+      <div class="col-span-2 text-sm text-gray-400 dark:text-gray-500">{% trans "Sin datos." %}</div>
+    {% endfor %}
+  </dl>
+
+{% else %}
+  <dl class="divide-y divide-base-200 dark:divide-base-700">
+    {% for item in items %}
+      {% with val=item.value|default:item.empty|default:"—" typ=item.type|default:"text" %}
+      <div class="flex items-center gap-4 py-3 first:pt-0 last:pb-0">
+        <dt class="w-36 flex-shrink-0 text-sm font-medium text-gray-500 dark:text-gray-400">
+          {{ item.label }}
+        </dt>
+        <dd class="flex-1 min-w-0">
+          {% if typ == "badge" %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+              {% if item.badge_type == 'success' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
+              {% elif item.badge_type == 'warning' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
+              {% elif item.badge_type == 'danger' %}bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
+              {% else %}bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400{% endif %}">
+              {{ val }}
+            </span>
+          {% elif typ == "mono" %}
+            <span class="font-mono text-xs text-gray-700 dark:text-gray-300 bg-base-100 dark:bg-base-800 px-1.5 py-0.5 rounded">{{ val }}</span>
+          {% elif typ == "link" %}
+            <a href="{{ item.href }}" class="text-sm text-primary-600 dark:text-primary-400 hover:underline truncate block">{{ val }}</a>
+          {% elif typ == "date" %}
+            <time class="text-sm text-gray-700 dark:text-gray-300">{{ val }}</time>
+          {% else %}
+            <span class="text-sm text-gray-900 dark:text-white">{{ val }}</span>
+          {% endif %}
+        </dd>
+      </div>
+      {% endwith %}
+    {% empty %}
+      <div class="py-3 text-sm text-gray-400 dark:text-gray-500">{% trans "Sin datos." %}</div>
+    {% endfor %}
+  </dl>
+{% endif %}
+
+{% endwith %}
