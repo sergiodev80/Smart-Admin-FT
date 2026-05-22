@@ -1,5 +1,5 @@
 {% load i18n %}
-{#
+<!--
   Edición inline de un campo via HTMX PATCH + Alpine para estado local.
 
   Parámetros:
@@ -47,7 +47,7 @@
             "url": request.path,
             "field_type": data.get("field_type", "text"),
         })
-#}
+-->
 
 {% with field_type=field_type|default:"text" empty_text=empty_text|default:"—" %}
 

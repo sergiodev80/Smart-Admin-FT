@@ -1,5 +1,5 @@
 {% load i18n unfold %}
-{#
+<!--
   Layout master-detail de dos columnas.
   Columna izquierda: lista de items (slot via component_content).
   Columna derecha: detalle cargado async via HTMX.
@@ -27,7 +27,7 @@
     def mi_detalle_view(request, pk):
         obj = get_object_or_404(MiModelo, pk=pk)
         return render(request, "mi_app/partials/detalle.html", {"obj": obj})
-#}
+-->
 
 {% with detail_target=detail_target|default:"split-detail" empty_icon=empty_icon|default:"article" %}
 {% with empty_title=empty_title|default:_("Selecciona un elemento") %}

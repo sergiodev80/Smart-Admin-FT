@@ -1,5 +1,5 @@
 {% load i18n %}
-{#
+<!--
   Estado vacío reutilizable para listas, tablas y secciones sin datos.
 
   Parámetros:
@@ -20,7 +20,7 @@
        with icon="group" title=_("Sin usuarios")
             action_label=_("Crear usuario") action_url="/admin/core/user/add/" %}
     {% endcomponent %}
-#}
+-->
 
 {% with icon=icon|default:"inbox" %}
 <div class="flex flex-col items-center justify-center py-12 px-6 text-center {{ class }}">

@@ -1,5 +1,5 @@
 {% load i18n unfold %}
-{#
+<!--
   Dialog de confirmación reutilizable. Dos modos:
   - Simple (default): título + mensaje + 2 botones
   - Estricto: requiere escribir confirm_text para habilitar el botón
@@ -23,7 +23,7 @@
     {% component "unfold/components/confirm_dialog.html"
        with title=_("Eliminar proyecto") confirm_text="mi-proyecto" danger=True action_url=url %}
     {% endcomponent %}
-#}
+-->
 
 {% with confirm_label=confirm_label|default:_("Confirmar") %}
 {% with cancel_label=cancel_label|default:_("Cancelar") %}

@@ -1,5 +1,5 @@
 {% load i18n core_tags %}
-{#
+<!--
   Placeholder animado (shimmer) para contenido que carga de forma async.
 
   Parámetros:
@@ -24,7 +24,7 @@
          hx-swap="innerHTML">
       {% component "unfold/components/skeleton.html" with rows=5 type="table" cols=3 %}{% endcomponent %}
     </div>
-#}
+-->
 
 {% with type=type|default:"lines" rows=rows|default:3 cols=cols|default:4 %}
 

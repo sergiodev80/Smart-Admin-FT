@@ -1,5 +1,5 @@
 {% load i18n unfold %}
-{#
+<!--
   Modal content shell — reutilizable con HTMX + Alpine openModal.
 
   Parámetros:
@@ -26,7 +26,7 @@
             Alpine.$data(document.body).openModal = true;
         }
     });
-#}
+-->
 
 {% with size=size|default:"md" %}
 {% with close_label=close_label|default:_("Cerrar") %}
