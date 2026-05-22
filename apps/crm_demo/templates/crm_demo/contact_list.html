@@ -5,6 +5,7 @@
 
 {% block extrahead %}
 {{ block.super }}
+<style>[x-cloak]{display:none!important}</style>
 <script>
   document.addEventListener("refreshContacts", function() {
     htmx.trigger("#contact-items", "refresh-list");
@@ -17,13 +18,13 @@
 {# Modal container — Alpine gestiona apertura/cierre #}
 <div x-data="{ openModal: false }"
      x-on:open-modal.window="openModal = true">
-  <template x-if="openModal">
-    <div class="fixed inset-0 z-50 flex items-center justify-center"
-         style="background:rgba(0,0,0,0.5)"
-         x-on:click.self="openModal = false">
-      <div id="modal-body" style="z-index:51;min-width:28rem;max-width:90vw"></div>
-    </div>
-  </template>
+  <div x-show="openModal"
+       x-cloak
+       class="fixed inset-0 z-50 flex items-center justify-center"
+       style="background:rgba(0,0,0,0.5)"
+       x-on:click.self="openModal = false">
+    <div id="modal-body" style="z-index:51;min-width:28rem;max-width:90vw"></div>
+  </div>
 </div>
 
 {# Page Header — inline para evitar conflictos de parsing con component slots #}
@@ -38,7 +39,7 @@
         hx-get="{% url 'crm_contact_create' %}"
         hx-target="#modal-body"
         hx-swap="innerHTML"
-        hx-on::after-request="window.dispatchEvent(new Event('open-modal'))"
+        hx-on:htmx:after-request="window.dispatchEvent(new CustomEvent('open-modal'))"
         class="flex items-center gap-1.5 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-default transition-colors">
         <span class="material-symbols-outlined text-base leading-none">add</span>
         {% trans "Nuevo contacto" %}
