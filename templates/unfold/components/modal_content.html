@@ -11,16 +11,16 @@
     close_label — string: texto del botón cerrar (default "Cerrar")
 
   Uso:
-    {% component "unfold/components/modal_content.html" with title=_("Mi título") icon="info" %}
+    [component "unfold/components/modal_content.html" with title=_("Mi título") icon="info"]
         <p>Contenido aquí</p>
-    {% endcomponent %}
+    [endcomponent]
 
   El trigger en el template padre:
-    <button hx-get="{% url 'mi_url' %}" hx-target="#modal-content" hx-swap="innerHTML">
+    <button hx-get="{% url 'mi_url']" hx-target="#modal-content" hx-swap="innerHTML">
         Abrir
     </button>
 
-  Script requerido una vez en el template padre ({% block extrahead %}):
+  Script requerido una vez en el template padre ({% block extrahead]):
     document.addEventListener("htmx:afterSwap", (e) => {
         if (e.detail.target.id === "modal-content") {
             Alpine.$data(document.body).openModal = true;

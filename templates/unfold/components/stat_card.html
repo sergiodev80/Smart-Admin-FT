@@ -12,15 +12,15 @@
     href        — string (opcional): convierte la card en enlace
 
   Uso simple:
-    {% component "unfold/components/stat_card.html"
-       with title=_("Pendientes") value=48 icon="inbox" %}
-    {% endcomponent %}
+    [component "unfold/components/stat_card.html"
+       with title=_("Pendientes") value=48 icon="inbox"]
+    [endcomponent]
 
   Uso con trend:
-    {% component "unfold/components/stat_card.html"
+    [component "unfold/components/stat_card.html"
        with title=_("Usuarios activos") value="1,234" icon="group"
-            trend=12 trend_label=_("vs mes anterior") %}
-    {% endcomponent %}
+            trend=12 trend_label=_("vs mes anterior")]
+    [endcomponent]
 -->
 
 {% with icon=icon|default:"analytics" icon_color=icon_color|default:"primary" %}

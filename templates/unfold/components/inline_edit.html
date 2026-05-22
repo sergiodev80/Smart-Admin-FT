@@ -12,21 +12,21 @@
     empty_text  — string (default: "—"): texto si value es vacío
 
   Uso texto:
-    {% component "unfold/components/inline_edit.html"
-       with value=obj.nombre field="nombre" url=patch_url %}
-    {% endcomponent %}
+    [component "unfold/components/inline_edit.html"
+       with value=obj.nombre field="nombre" url=patch_url]
+    [endcomponent]
 
   Uso select:
-    {% component "unfold/components/inline_edit.html"
+    [component "unfold/components/inline_edit.html"
        with value=obj.estado field="estado" url=patch_url
-            field_type="select" choices=estado_choices %}
-    {% endcomponent %}
+            field_type="select" choices=estado_choices]
+    [endcomponent]
 
   Uso textarea:
-    {% component "unfold/components/inline_edit.html"
+    [component "unfold/components/inline_edit.html"
        with value=obj.descripcion field="descripcion" url=patch_url
-            field_type="textarea" %}
-    {% endcomponent %}
+            field_type="textarea"]
+    [endcomponent]
 
   Vista PATCH Django:
     @require_http_methods(["PATCH"])

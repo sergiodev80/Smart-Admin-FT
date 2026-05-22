@@ -9,20 +9,20 @@
     avatar — bool (default: True) — círculo avatar en modo "lines"
 
   Uso lines (default):
-    {% component "unfold/components/skeleton.html" with rows=3 %}{% endcomponent %}
+    [component "unfold/components/skeleton.html" with rows=3][endcomponent]
 
   Uso table:
-    {% component "unfold/components/skeleton.html" with rows=5 type="table" cols=4 %}{% endcomponent %}
+    [component "unfold/components/skeleton.html" with rows=5 type="table" cols=4][endcomponent]
 
   Uso lines sin avatar:
-    {% component "unfold/components/skeleton.html" with rows=4 avatar=False %}{% endcomponent %}
+    [component "unfold/components/skeleton.html" with rows=4 avatar=False][endcomponent]
 
   Patrón HTMX — mostrar skeleton mientras carga:
     <div id="mi-lista"
-         hx-get="{% url 'mi_vista' %}"
+         hx-get="{% url 'mi_vista']"
          hx-trigger="load"
          hx-swap="innerHTML">
-      {% component "unfold/components/skeleton.html" with rows=5 type="table" cols=3 %}{% endcomponent %}
+      [component "unfold/components/skeleton.html" with rows=5 type="table" cols=3][endcomponent]
     </div>
 -->
 

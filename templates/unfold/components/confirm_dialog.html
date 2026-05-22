@@ -15,14 +15,14 @@
     hx_delete     — string (opcional) — hx-delete URL alternativa
 
   Uso simple:
-    {% component "unfold/components/confirm_dialog.html"
-       with title=_("Eliminar usuario") body=_("No se puede deshacer.") danger=True action_url=url %}
-    {% endcomponent %}
+    [component "unfold/components/confirm_dialog.html"
+       with title=_("Eliminar usuario") body=_("No se puede deshacer.") danger=True action_url=url]
+    [endcomponent]
 
   Uso estricto:
-    {% component "unfold/components/confirm_dialog.html"
-       with title=_("Eliminar proyecto") confirm_text="mi-proyecto" danger=True action_url=url %}
-    {% endcomponent %}
+    [component "unfold/components/confirm_dialog.html"
+       with title=_("Eliminar proyecto") confirm_text="mi-proyecto" danger=True action_url=url]
+    [endcomponent]
 -->
 
 {% with confirm_label=confirm_label|default:_("Confirmar") %}

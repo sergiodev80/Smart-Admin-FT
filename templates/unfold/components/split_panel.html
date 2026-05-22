@@ -11,17 +11,17 @@
     empty_title   — string (default: "Selecciona un elemento") — texto empty state
 
   Uso:
-    {% component "unfold/components/split_panel.html" with list_title=_("Usuarios") %}
-      {% for obj in object_list %}
+    [component "unfold/components/split_panel.html" with list_title=_("Usuarios")]
+      {% for obj in object_list]
         <a href="#"
-           hx-get="{% url 'mi_detalle' obj.pk %}"
+           hx-get="{% url 'mi_detalle' obj.pk]"
            hx-target="#split-detail"
            hx-swap="innerHTML"
-           class="split-panel-item {% if obj.pk == selected_pk %}active{% endif %}">
+           class="split-panel-item {% if obj.pk == selected_pk]active{% endif]">
           <span class="block font-medium text-sm text-gray-900 dark:text-white">{{ obj }}</span>
         </a>
-      {% endfor %}
-    {% endcomponent %}
+      {% endfor]
+    [endcomponent]
 
   Vista de detalle (retorna partial HTML sin extends):
     def mi_detalle_view(request, pk):

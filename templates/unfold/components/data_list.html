@@ -15,10 +15,10 @@
     empty      — string fallback si value es falsy (default "—")
 
   Uso horizontal (default):
-    {% component "unfold/components/data_list.html" with items=detalle %}{% endcomponent %}
+    [component "unfold/components/data_list.html" with items=detalle][endcomponent]
 
   Uso grid:
-    {% component "unfold/components/data_list.html" with items=kpis layout="grid" %}{% endcomponent %}
+    [component "unfold/components/data_list.html" with items=kpis layout="grid"][endcomponent]
 -->
 
 {% with layout=layout|default:"horizontal" %}
