@@ -1,0 +1,54 @@
+{% load i18n %}
+{#
+  Estado vacío reutilizable para listas, tablas y secciones sin datos.
+
+  Parámetros:
+    icon         — string Material Symbol (default: "inbox")
+    title        — string (requerido)
+    subtitle     — string (opcional)
+    action_label — string (opcional) — texto del botón
+    action_url   — string (opcional) — URL del botón
+    class        — string (opcional) — clases extra para el contenedor
+
+  Uso sin acción:
+    {% component "unfold/components/empty_state.html"
+       with icon="inbox" title=_("Sin registros") subtitle=_("Aún no hay datos.") %}
+    {% endcomponent %}
+
+  Uso con acción:
+    {% component "unfold/components/empty_state.html"
+       with icon="group" title=_("Sin usuarios")
+            action_label=_("Crear usuario") action_url="/admin/core/user/add/" %}
+    {% endcomponent %}
+#}
+
+{% with icon=icon|default:"inbox" %}
+<div class="flex flex-col items-center justify-center py-12 px-6 text-center {{ class }}">
+
+  <span class="material-symbols-outlined text-5xl text-gray-300 dark:text-gray-600 mb-4">
+    {{ icon }}
+  </span>
+
+  <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+    {{ title }}
+  </p>
+
+  {% if subtitle %}
+    <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">
+      {{ subtitle }}
+    </p>
+  {% endif %}
+
+  {% if action_label and action_url %}
+    <a
+      href="{{ action_url }}"
+      class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded-default
+             bg-primary-600 hover:bg-primary-700 text-white transition-colors mt-2"
+    >
+      <span class="material-symbols-outlined text-sm leading-none">add</span>
+      {{ action_label }}
+    </a>
+  {% endif %}
+
+</div>
+{% endwith %}
