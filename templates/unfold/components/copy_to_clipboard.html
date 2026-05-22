@@ -1,0 +1,67 @@
+{% load i18n %}
+{#
+  Valor con botón de copia al portapapeles. Ícono cambia a ✓ por 2 segundos al copiar.
+
+  Parámetros:
+    value      — string (requerido): valor a copiar
+    label      — string (opcional): etiqueta sobre el valor
+    show_value — bool (default: True): mostrar el valor junto al ícono
+    truncate   — bool (default: False): truncar valor largo con …
+
+  Uso básico:
+    {% component "unfold/components/copy_to_clipboard.html"
+       with value=obj.uuid %}
+    {% endcomponent %}
+
+  Con label:
+    {% component "unfold/components/copy_to_clipboard.html"
+       with value=api_token label=_("Token API") %}
+    {% endcomponent %}
+
+  Solo ícono:
+    {% component "unfold/components/copy_to_clipboard.html"
+       with value=obj.uuid show_value=False %}
+    {% endcomponent %}
+#}
+
+<div
+  x-data="{
+    copied: false,
+    timer: null,
+    copy() {
+      navigator.clipboard.writeText('{{ value|escapejs }}').then(() => {
+        this.copied = true;
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => { this.copied = false; }, 2000);
+      });
+    }
+  }"
+  class="inline-flex flex-col gap-1"
+>
+  {% if label %}
+    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ label }}</span>
+  {% endif %}
+
+  <div class="inline-flex items-center gap-1.5 group">
+    {% if show_value != False %}
+      <span class="font-mono text-xs text-gray-700 dark:text-gray-300
+                   bg-base-100 dark:bg-base-800 px-2 py-1 rounded
+                   {% if truncate %}max-w-[180px] truncate inline-block{% endif %}"
+            title="{{ value }}">
+        {{ value }}
+      </span>
+    {% endif %}
+
+    <button
+      type="button"
+      x-on:click="copy()"
+      :class="copied ? 'text-green-500' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'"
+      class="transition-colors p-0.5 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
+      :aria-label="copied ? '{% trans 'Copiado' %}' : '{% trans 'Copiar' %}'"
+      :title="copied ? '{% trans 'Copiado' %}' : '{% trans 'Copiar' %}'"
+    >
+      <span class="material-symbols-outlined text-base leading-none"
+            x-text="copied ? 'check' : 'content_copy'"></span>
+    </button>
+  </div>
+</div>
