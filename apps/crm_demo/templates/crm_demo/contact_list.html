@@ -9,6 +9,7 @@
 <script>
   document.addEventListener("refreshContacts", function() {
     htmx.trigger("#contact-items", "refresh-list");
+    window.dispatchEvent(new CustomEvent("close-modal"));
   });
   // Calcular offset del sidebar para restringir el overlay al área de contenido
   function setMainLeft() {
@@ -28,7 +29,8 @@
 
 {# Modal container — Alpine gestiona apertura/cierre #}
 <div x-data="{ openModal: false }"
-     x-on:open-modal.window="openModal = true">
+     x-on:open-modal.window="openModal = true"
+     x-on:close-modal.window="openModal = false">
   <div x-show="openModal"
        x-cloak
        class="fixed z-50 flex items-center justify-center"
