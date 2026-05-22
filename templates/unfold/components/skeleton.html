@@ -1,0 +1,94 @@
+{% load i18n core_tags %}
+{#
+  Placeholder animado (shimmer) para contenido que carga de forma async.
+
+  Parámetros:
+    type   — "lines" (default) | "table"
+    rows   — int (default: 3) — número de filas
+    cols   — int (default: 4) — columnas en modo "table"
+    avatar — bool (default: True) — círculo avatar en modo "lines"
+
+  Uso lines (default):
+    {% component "unfold/components/skeleton.html" with rows=3 %}{% endcomponent %}
+
+  Uso table:
+    {% component "unfold/components/skeleton.html" with rows=5 type="table" cols=4 %}{% endcomponent %}
+
+  Uso lines sin avatar:
+    {% component "unfold/components/skeleton.html" with rows=4 avatar=False %}{% endcomponent %}
+
+  Patrón HTMX — mostrar skeleton mientras carga:
+    <div id="mi-lista"
+         hx-get="{% url 'mi_vista' %}"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+      {% component "unfold/components/skeleton.html" with rows=5 type="table" cols=3 %}{% endcomponent %}
+    </div>
+#}
+
+{% with type=type|default:"lines" rows=rows|default:3 cols=cols|default:4 %}
+
+<style>
+  @keyframes sk-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+  .sk-bar {
+    background: linear-gradient(
+      90deg,
+      #f1f5f9 25%,
+      #e2e8f0 50%,
+      #f1f5f9 75%
+    );
+    background-size: 200% 100%;
+    animation: sk-shimmer 1.5s ease-in-out infinite;
+    border-radius: 4px;
+  }
+  .dark .sk-bar {
+    background: linear-gradient(
+      90deg,
+      #1e293b 25%,
+      #334155 50%,
+      #1e293b 75%
+    );
+    background-size: 200% 100%;
+  }
+</style>
+
+{% if type == "table" %}
+  {# ── Tabla skeleton ── #}
+  <div class="w-full overflow-hidden">
+    {# Cabecera #}
+    <div class="flex gap-4 px-4 py-3 bg-base-50 dark:bg-base-800/50 border-b border-base-200 dark:border-base-700">
+      {% for i in cols|make_range %}
+        <div class="sk-bar h-3 flex-1"></div>
+      {% endfor %}
+    </div>
+    {# Filas #}
+    {% for i in rows|make_range %}
+      <div class="flex gap-4 items-center px-4 py-3 border-b border-base-100 dark:border-base-800">
+        {% for j in cols|make_range %}
+          <div class="sk-bar h-3 flex-1"></div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+{% else %}
+  {# ── Lines skeleton (default) ── #}
+  <div class="flex flex-col gap-4 p-1">
+    {% for i in rows|make_range %}
+      <div class="flex items-center gap-3">
+        {% if avatar != False %}
+          <div class="sk-bar rounded-full flex-shrink-0" style="width:36px;height:36px"></div>
+        {% endif %}
+        <div class="flex flex-col gap-2 flex-1">
+          <div class="sk-bar h-3" style="width:65%"></div>
+          <div class="sk-bar h-2.5" style="width:45%"></div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% endwith %}
