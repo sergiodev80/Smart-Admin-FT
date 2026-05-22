@@ -62,7 +62,7 @@ def contact_counts(request):
 @staff_member_required
 def contact_detail(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
-    fields = [
+    items = [
         {"label": str(_("Nombre")),   "value": contact.name},
         {"label": str(_("Email")),    "value": contact.email},
         {"label": str(_("Empresa")),  "value": contact.company or "—"},
@@ -72,7 +72,7 @@ def contact_detail(request, pk):
     ]
     return render(request, "crm_demo/contact_detail.html", {
         "contact": contact,
-        "fields": fields,
+        "items": items,
         "purchases": contact.purchases.all(),
         "email_logs": contact.email_logs.all(),
         "call_logs": contact.call_logs.all(),

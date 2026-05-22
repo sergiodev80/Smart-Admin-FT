@@ -1,0 +1,72 @@
+{% extends "admin/base_site.html" %}
+{% load i18n unfold %}
+
+{% block title %}{% trans "Gestión de Contactos" %} | CRM Demo{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+  document.addEventListener("refreshContacts", function() {
+    htmx.trigger("#contact-items", "refresh-list");
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+
+{# Modal container — Alpine gestiona apertura/cierre #}
+<div x-data="{ openModal: false }"
+     x-on:open-modal.window="openModal = true">
+  <template x-if="openModal">
+    <div class="fixed inset-0 z-50 flex items-center justify-center"
+         style="background:rgba(0,0,0,0.5)"
+         x-on:click.self="openModal = false">
+      <div id="modal-body" style="z-index:51;min-width:28rem;max-width:90vw"></div>
+    </div>
+  </template>
+</div>
+
+{# Page Header #}
+{% component "unfold/components/page_header.html"
+   with title=_("Gestión de Contactos")
+        subtitle=_("Perfiles unificados con historial de compras, emails y llamadas") %}
+  <button
+    hx-get="{% url 'crm_contact_create' %}"
+    hx-target="#modal-body"
+    hx-swap="innerHTML"
+    hx-on::after-request="window.dispatchEvent(new Event('open-modal'))"
+    class="flex items-center gap-1.5 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-default transition-colors">
+    <span class="material-symbols-outlined text-base leading-none">add</span>
+    {% trans "Nuevo contacto" %}
+  </button>
+{% endcomponent %}
+
+{# Stat Cards #}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem">
+  {% for card in stat_cards %}
+    {% component "unfold/components/stat_card.html"
+       with title=card.title value=card.value icon=card.icon description=card.description %}
+    {% endcomponent %}
+  {% endfor %}
+</div>
+
+{# Filter Tabs #}
+<div style="margin-bottom:1rem">
+  {% component "unfold/components/filter_tabs.html" with tabs=tabs %}{% endcomponent %}
+</div>
+
+{# Split Panel #}
+{% component "unfold/components/split_panel.html"
+   with list_title=_("Contactos")
+        detail_target="contact-detail"
+        empty_icon="person"
+        empty_title=_("Selecciona un contacto para ver su detalle") %}
+  <div id="contact-items"
+       hx-get="{% url 'crm_contact_items' %}{% if status_filter %}?status={{ status_filter }}{% endif %}"
+       hx-trigger="load, refresh-list"
+       hx-swap="innerHTML">
+    {% component "unfold/components/skeleton.html" with rows=5 %}{% endcomponent %}
+  </div>
+{% endcomponent %}
+
+{% endblock %}
