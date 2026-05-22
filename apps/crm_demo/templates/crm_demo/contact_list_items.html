@@ -3,7 +3,7 @@
 {% if contacts %}
   {% for contact in contacts %}
     <a href="#"
-       hx-get="{% url 'crm_contact_detail' contact.pk %}"
+       hx-get="{{ contact|url_contact_detail }}"
        hx-target="#contact-detail"
        hx-swap="innerHTML"
        class="split-panel-item block">
@@ -16,21 +16,11 @@
           {% endif %}
         </div>
         <div style="flex-shrink:0" x-on:click.stop>
-          {% component "unfold/components/inline_edit.html"
-             with value=contact.phone
-                  field="phone"
-                  url=contact|url_inline_edit
-                  placeholder=_("Teléfono")
-                  empty_text=_("+ teléfono") %}
-          {% endcomponent %}
+          {% component "unfold/components/inline_edit.html" with value=contact.phone field="phone" url=contact|url_inline_edit placeholder=_("Teléfono") empty_text=_("+ teléfono") %}{% endcomponent %}
         </div>
       </div>
     </a>
   {% endfor %}
 {% else %}
-  {% component "unfold/components/empty_state.html"
-     with icon="search_off"
-          title=_("Sin resultados")
-          description=_("No hay contactos con este filtro.") %}
-  {% endcomponent %}
+  {% component "unfold/components/empty_state.html" with icon="search_off" title=_("Sin resultados") description=_("No hay contactos con este filtro.") %}{% endcomponent %}
 {% endif %}

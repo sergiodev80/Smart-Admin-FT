@@ -94,19 +94,20 @@ def contact_inline_edit(request, pk):
             return HttpResponse(status=400)
         setattr(contact, field, value)
         contact.save(update_fields=[field])
-        response = render(request, "unfold/components/inline_edit.html", {
+        ctx = {
             "value": getattr(contact, field),
             "field": field,
             "url": request.path,
             "field_type": "text",
-        })
+        }
+        response = render(request, "crm_demo/inline_edit_partial.html", ctx)
         response["HX-Trigger"] = json.dumps({
             "showToast": {"type": "success", "title": str(_("Guardado")), "body": ""}
         })
         return response
 
     field = request.GET.get("field", "phone")
-    return render(request, "unfold/components/inline_edit.html", {
+    return render(request, "crm_demo/inline_edit_partial.html", {
         "value": getattr(contact, field, ""),
         "field": field,
         "url": request.path,
