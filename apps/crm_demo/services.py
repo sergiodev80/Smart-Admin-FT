@@ -1,6 +1,7 @@
 import logging
 from decimal import Decimal
 
+from django.db import IntegrityError
 from django.utils.translation import gettext_lazy as _
 
 from apps.config.services import ConfigService
@@ -21,13 +22,16 @@ class ContactService:
                 f"Se alcanzó el máximo de {max_contacts} contactos permitidos en la demo."
             )
 
-        contact = Contact.objects.create(
-            name=data["name"],
-            email=data["email"],
-            phone=data.get("phone", ""),
-            company=data.get("company", ""),
-            status=data.get("status", Contact.STATUS_LEAD),
-        )
+        try:
+            contact = Contact.objects.create(
+                name=data["name"],
+                email=data["email"],
+                phone=data.get("phone", ""),
+                company=data.get("company", ""),
+                status=data.get("status", Contact.STATUS_LEAD),
+            )
+        except IntegrityError:
+            raise ValueError(str(_("Ya existe un contacto con ese email.")))
 
         NotificationService.send(
             user=created_by,
