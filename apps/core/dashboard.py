@@ -10,6 +10,14 @@ from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
 
+def _get_crm_cards_safe(request):
+    try:
+        from apps.crm_demo.dashboard import get_crm_cards
+        return get_crm_cards(request)
+    except Exception:
+        return []
+
+
 class _Table:
     """Objeto mínimo compatible con el componente table de Unfold."""
     def __init__(self, headers, rows):
@@ -68,6 +76,7 @@ def dashboard_callback(request, context):
             {"title": _("Notificaciones"), "value": unread_notifications, "icon": "notifications", "description": _("Sin leer")},
             {"title": _("Auditoría hoy"), "value": audit_today, "icon": "history", "description": _("Registros de hoy")},
             # PROYECTO: agregar stat cards específicas del proyecto aquí
+            *_get_crm_cards_safe(request),
         ],
         "users_table": _Table(
             headers=[_("Usuario"), _("Email"), _("Registrado")],

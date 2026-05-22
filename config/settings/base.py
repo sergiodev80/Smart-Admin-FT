@@ -219,6 +219,23 @@ UNFOLD = {
                 ],
             },
             # --- Agregar secciones del proyecto aquí ---
+            {
+                "title": _("CRM Demo"),
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Gestión de contactos"),
+                        "icon": "contacts",
+                        "link": "/admin/crm-demo/contacts/",
+                    },
+                    {
+                        "title": _("Contactos (admin)"),
+                        "icon": "manage_accounts",
+                        "link": "/admin/crm_demo/contact/",
+                    },
+                ],
+            },
         ],
     },
 }
