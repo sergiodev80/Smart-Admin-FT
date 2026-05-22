@@ -119,12 +119,23 @@ def contact_inline_edit(request, pk):
 def contact_create(request):
     from django import forms as django_forms
 
+    _input_cls = (
+        "w-full border border-base-300 dark:border-base-600 rounded-default px-3 py-2 text-sm "
+        "bg-white dark:bg-base-800 text-gray-900 dark:text-white "
+        "focus:outline-none focus:ring-2 focus:ring-primary-500"
+    )
+
     class ContactForm(django_forms.Form):
-        name    = django_forms.CharField(max_length=200, label=str(_("Nombre")))
-        email   = django_forms.EmailField(label=str(_("Email")))
-        phone   = django_forms.CharField(max_length=50, required=False, label=str(_("Teléfono")))
-        company = django_forms.CharField(max_length=200, required=False, label=str(_("Empresa")))
-        status  = django_forms.ChoiceField(choices=Contact.STATUS_CHOICES, label=str(_("Estado")))
+        name    = django_forms.CharField(max_length=200, label=str(_("Nombre")),
+                    widget=django_forms.TextInput(attrs={"class": _input_cls, "placeholder": str(_("Nombre completo"))}))
+        email   = django_forms.EmailField(label=str(_("Email")),
+                    widget=django_forms.EmailInput(attrs={"class": _input_cls, "placeholder": "email@empresa.com"}))
+        phone   = django_forms.CharField(max_length=50, required=False, label=str(_("Teléfono")),
+                    widget=django_forms.TextInput(attrs={"class": _input_cls, "placeholder": "+34 600 000 000"}))
+        company = django_forms.CharField(max_length=200, required=False, label=str(_("Empresa")),
+                    widget=django_forms.TextInput(attrs={"class": _input_cls, "placeholder": str(_("Nombre de la empresa"))}))
+        status  = django_forms.ChoiceField(choices=Contact.STATUS_CHOICES, label=str(_("Estado")),
+                    widget=django_forms.Select(attrs={"class": _input_cls}))
 
     if request.method == "POST":
         form = ContactForm(request.POST)

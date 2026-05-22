@@ -10,6 +10,15 @@
   document.addEventListener("refreshContacts", function() {
     htmx.trigger("#contact-items", "refresh-list");
   });
+  // Calcular offset del sidebar para restringir el overlay al área de contenido
+  function setMainLeft() {
+    var main = document.getElementById("main");
+    if (main) {
+      document.documentElement.style.setProperty("--main-left", main.getBoundingClientRect().left + "px");
+    }
+  }
+  document.addEventListener("DOMContentLoaded", setMainLeft);
+  window.addEventListener("resize", setMainLeft);
 </script>
 {% endblock %}
 
@@ -20,8 +29,8 @@
      x-on:open-modal.window="openModal = true">
   <div x-show="openModal"
        x-cloak
-       class="fixed inset-0 z-50 flex items-center justify-center"
-       style="background:rgba(0,0,0,0.5)"
+       class="fixed z-50 flex items-center justify-center"
+       style="top:0;bottom:0;right:0;left:var(--main-left,0px);background:rgba(0,0,0,0.5)"
        x-on:click.self="openModal = false">
     <div id="modal-body" style="z-index:51;min-width:28rem;max-width:90vw"></div>
   </div>
