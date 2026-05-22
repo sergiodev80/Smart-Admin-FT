@@ -178,6 +178,71 @@ def dashboard_callback(request, context):
 **Inline Edit endpoint**
 Debe recibir PATCH y retornar el componente completo — Unfold hace `outerHTML` swap para reinicializar Alpine.
 
+**Docstrings en componentes custom — NO usar `{% %}` dentro de `{# #}` ni `<!-- -->`**
+Django parsea `{% %}` incluso dentro de comentarios `{# #}` multilínea Y dentro de `<!-- -->`.
+Los docstrings de los componentes en `templates/unfold/components/` deben usar `[component]` / `[endcomponent]`
+como texto plano en los ejemplos de uso, nunca la sintaxis real `{% %}`.
+```html
+<!-- Uso:
+  [component "unfold/components/stat_card.html" with title="KPI" value=42]
+  [endcomponent]
+-->
+```
+
+**`{% component %}...{% endcomponent %}` con slot content falla dentro de `{% block %}`**
+Si el contenido entre `{% component %}` y `{% endcomponent %}` tiene tags Django (como `{% trans %}`,
+`{% url %}`, `{% if %}`), el parser falla al estar dentro de un `{% block %}` heredado.
+Solución: renderizar ese fragmento como HTML inline (sin usar el componente con slot content).
+Los componentes sin slot content (`{% component "..." with x=y %}{% endcomponent %}`) sí funcionan.
+
+**Modal con Alpine + HTMX — usar `x-show` no `x-template x-if`**
+`<template x-if>` no renderiza el DOM hasta que la condición es true, por lo que HTMX no puede
+escribir en un elemento dentro de él. Siempre usar `x-show` + `x-cloak` para modales HTMX:
+```html
+<div x-data="{ openModal: false }" x-on:open-modal.window="openModal = true" x-on:close-modal.window="openModal = false">
+  <div x-show="openModal" x-cloak style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center"
+       x-on:click.self="openModal = false">
+    <div id="modal-body"></div>
+  </div>
+</div>
+```
+Y definir `[x-cloak]{display:none!important}` en `<style>` del `{% block extrahead %}`.
+
+**Cerrar modal tras acción HTMX exitosa (204)**
+Con respuesta 204 no hay body para swapear, así que `hx-swap` no cierra el modal.
+Disparar cierre via evento en el listener JS del HX-Trigger:
+```javascript
+document.addEventListener("refreshContacts", function() {
+  htmx.trigger("#lista", "refresh-list");
+  window.dispatchEvent(new CustomEvent("close-modal"));
+});
+```
+
+**`hx-on::after-request` — sintaxis correcta**
+La sintaxis correcta en HTMX para eventos del ciclo de vida es:
+`hx-on:htmx:after-request="..."` (no `hx-on::after-request`).
+
+**IntegrityError en Services — siempre capturar**
+`Model.objects.create()` puede lanzar `IntegrityError` (ej: unique constraint en email).
+Capturarlo en el Service y convertirlo a `ValueError` para que la vista lo maneje como error de form:
+```python
+from django.db import IntegrityError
+try:
+    obj = Model.objects.create(...)
+except IntegrityError:
+    raise ValueError(_("Ya existe un registro con ese valor."))
+```
+
+**Inputs de forms Django sin estilos en modales**
+`{{ field }}` renderiza widgets sin CSS. Agregar clases Unfold en la definición del widget:
+```python
+widget=django_forms.TextInput(attrs={
+    "class": "w-full border border-base-300 dark:border-base-600 rounded-default px-3 py-2 text-sm "
+             "bg-white dark:bg-base-800 text-gray-900 dark:text-white "
+             "focus:outline-none focus:ring-2 focus:ring-primary-500"
+})
+```
+
 ---
 
 ## Design Summary Format
