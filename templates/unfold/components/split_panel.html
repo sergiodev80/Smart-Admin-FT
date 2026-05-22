@@ -1,0 +1,85 @@
+{% load i18n unfold %}
+{#
+  Layout master-detail de dos columnas.
+  Columna izquierda: lista de items (slot via component_content).
+  Columna derecha: detalle cargado async via HTMX.
+
+  Parámetros:
+    detail_target — string (default: "split-detail") — ID del panel derecho
+    list_title    — string (opcional) — título sobre la lista
+    empty_icon    — string (default: "article") — ícono del empty state inicial
+    empty_title   — string (default: "Selecciona un elemento") — texto empty state
+
+  Uso:
+    {% component "unfold/components/split_panel.html" with list_title=_("Usuarios") %}
+      {% for obj in object_list %}
+        <a href="#"
+           hx-get="{% url 'mi_detalle' obj.pk %}"
+           hx-target="#split-detail"
+           hx-swap="innerHTML"
+           class="split-panel-item {% if obj.pk == selected_pk %}active{% endif %}">
+          <span class="block font-medium text-sm text-gray-900 dark:text-white">{{ obj }}</span>
+        </a>
+      {% endfor %}
+    {% endcomponent %}
+
+  Vista de detalle (retorna partial HTML sin extends):
+    def mi_detalle_view(request, pk):
+        obj = get_object_or_404(MiModelo, pk=pk)
+        return render(request, "mi_app/partials/detalle.html", {"obj": obj})
+#}
+
+{% with detail_target=detail_target|default:"split-detail" empty_icon=empty_icon|default:"article" %}
+{% with empty_title=empty_title|default:_("Selecciona un elemento") %}
+
+<style>
+  .split-panel-item {
+    display: block;
+    padding: 10px 16px;
+    border-left: 3px solid transparent;
+    transition: background-color 0.15s, border-color 0.15s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .split-panel-item:hover {
+    background-color: rgb(var(--color-base-50, 248 250 252));
+  }
+  .dark .split-panel-item:hover {
+    background-color: rgba(255,255,255,0.04);
+  }
+  .split-panel-item.active {
+    border-left-color: rgb(var(--color-primary-600, 79 70 229));
+    background-color: rgb(var(--color-primary-50, 238 242 255));
+  }
+  .dark .split-panel-item.active {
+    background-color: rgba(30, 27, 75, 0.3);
+  }
+</style>
+
+<div class="flex flex-col md:flex-row border border-base-200 dark:border-base-700 rounded-default overflow-hidden bg-white dark:bg-base-900">
+
+  {# Columna izquierda — lista #}
+  <div class="w-full md:w-[35%] border-b md:border-b-0 md:border-r border-base-200 dark:border-base-700 flex flex-col">
+    {% if list_title %}
+      <div class="px-4 py-3 border-b border-base-200 dark:border-base-700 bg-base-50 dark:bg-base-800/50">
+        <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          {{ list_title }}
+        </h3>
+      </div>
+    {% endif %}
+    <div class="overflow-y-auto flex-1 divide-y divide-base-100 dark:divide-base-800">
+      {{ component_content }}
+    </div>
+  </div>
+
+  {# Columna derecha — detalle #}
+  <div id="{{ detail_target }}" class="flex-1 overflow-y-auto">
+    {% component "unfold/components/empty_state.html"
+       with icon=empty_icon title=empty_title %}
+    {% endcomponent %}
+  </div>
+
+</div>
+
+{% endwith %}
+{% endwith %}
