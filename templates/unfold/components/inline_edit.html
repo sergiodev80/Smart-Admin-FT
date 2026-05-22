@@ -1,0 +1,184 @@
+{% load i18n %}
+{#
+  Edición inline de un campo via HTMX PATCH + Alpine para estado local.
+
+  Parámetros:
+    value       — string (requerido): valor actual
+    field       — string (requerido): nombre del campo en el modelo
+    url         — string (requerido): URL que recibe el PATCH
+    field_type  — "text" (default) | "select" | "textarea"
+    choices     — list de [value, label] (solo field_type="select")
+    placeholder — string (opcional)
+    empty_text  — string (default: "—"): texto si value es vacío
+
+  Uso texto:
+    {% component "unfold/components/inline_edit.html"
+       with value=obj.nombre field="nombre" url=patch_url %}
+    {% endcomponent %}
+
+  Uso select:
+    {% component "unfold/components/inline_edit.html"
+       with value=obj.estado field="estado" url=patch_url
+            field_type="select" choices=estado_choices %}
+    {% endcomponent %}
+
+  Uso textarea:
+    {% component "unfold/components/inline_edit.html"
+       with value=obj.descripcion field="descripcion" url=patch_url
+            field_type="textarea" %}
+    {% endcomponent %}
+
+  Vista PATCH Django:
+    @require_http_methods(["PATCH"])
+    def mi_patch_view(request, pk):
+        import json
+        obj = get_object_or_404(MiModelo, pk=pk)
+        data = json.loads(request.body)
+        field = data.get("field")
+        value = data.get("value")
+        allowed = {"nombre", "estado", "descripcion"}
+        if field not in allowed:
+            return HttpResponse(status=400)
+        setattr(obj, field, value)
+        obj.save(update_fields=[field])
+        return render(request, "unfold/components/inline_edit.html", {
+            "value": getattr(obj, field),
+            "field": field,
+            "url": request.path,
+            "field_type": data.get("field_type", "text"),
+        })
+#}
+
+{% with field_type=field_type|default:"text" empty_text=empty_text|default:"—" %}
+
+<div
+  x-data="{
+    editing: false,
+    saving: false,
+    error: false,
+    original: '{{ value|escapejs }}',
+    current: '{{ value|escapejs }}',
+    startEdit() {
+      this.editing = true;
+      this.error = false;
+      this.$nextTick(() => this.$refs.input && this.$refs.input.focus());
+    },
+    cancel() {
+      this.editing = false;
+      this.current = this.original;
+      this.error = false;
+    },
+    async save() {
+      this.saving = true;
+      this.error = false;
+      try {
+        const res = await fetch('{{ url }}', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ''
+          },
+          body: JSON.stringify({
+            field: '{{ field|escapejs }}',
+            value: this.current,
+            field_type: '{{ field_type }}'
+          })
+        });
+        if (!res.ok) { this.error = true; this.saving = false; return; }
+        const html = await res.text();
+        this.$el.outerHTML = html;
+      } catch(e) {
+        this.error = true;
+        this.saving = false;
+      }
+    }
+  }"
+  x-on:keydown.escape.window="if(editing) cancel()"
+  class="inline-flex items-center gap-1 group"
+>
+  {# Vista reposo #}
+  <span
+    x-show="!editing"
+    x-on:click="startEdit()"
+    class="text-sm text-gray-900 dark:text-white cursor-pointer rounded px-1 -mx-1
+           hover:bg-base-100 dark:hover:bg-base-800 transition-colors"
+  >
+    <span x-text="current || '{{ empty_text }}'"></span>
+    <span class="material-symbols-outlined text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity ml-0.5 align-middle">edit</span>
+  </span>
+
+  {# Vista edición #}
+  <div x-show="editing" x-cloak class="flex items-center gap-1.5">
+
+    {% if field_type == "select" %}
+      <select
+        x-ref="input"
+        x-model="current"
+        class="border rounded-default px-2 py-1 text-sm bg-white dark:bg-base-800
+               text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500
+               {% if error %}border-red-500{% else %}border-primary-400{% endif %}"
+      >
+        {% for choice_value, choice_label in choices %}
+          <option value="{{ choice_value }}"
+                  {% if choice_value == value %}selected{% endif %}>
+            {{ choice_label }}
+          </option>
+        {% endfor %}
+      </select>
+
+    {% elif field_type == "textarea" %}
+      <textarea
+        x-ref="input"
+        x-model="current"
+        rows="3"
+        placeholder="{{ placeholder }}"
+        class="border rounded-default px-2 py-1 text-sm bg-white dark:bg-base-800
+               text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500
+               resize-none min-w-[200px]
+               {% if error %}border-red-500{% else %}border-primary-400{% endif %}"
+      ></textarea>
+
+    {% else %}
+      <input
+        type="text"
+        x-ref="input"
+        x-model="current"
+        placeholder="{{ placeholder }}"
+        x-on:keydown.enter="save()"
+        class="border rounded-default px-2 py-1 text-sm bg-white dark:bg-base-800
+               text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500
+               {% if error %}border-red-500{% else %}border-primary-400{% endif %}"
+      >
+    {% endif %}
+
+    {# Botón guardar #}
+    <button
+      type="button"
+      x-on:click="save()"
+      :disabled="saving"
+      class="p-1 rounded text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors disabled:opacity-50"
+      aria-label="{% trans 'Guardar' %}"
+    >
+      <span class="material-symbols-outlined text-base leading-none"
+            x-text="saving ? 'progress_activity' : 'check'"></span>
+    </button>
+
+    {# Botón cancelar #}
+    <button
+      type="button"
+      x-on:click="cancel()"
+      class="p-1 rounded text-gray-400 hover:bg-base-100 dark:hover:bg-base-800 transition-colors"
+      aria-label="{% trans 'Cancelar' %}"
+    >
+      <span class="material-symbols-outlined text-base leading-none">close</span>
+    </button>
+
+    {# Error #}
+    <span x-show="error" class="text-xs text-red-500">
+      {% trans "Error al guardar" %}
+    </span>
+
+  </div>
+</div>
+
+{% endwith %}
