@@ -96,6 +96,38 @@ class NotificationServiceTest(TestCase):
         )
         mock_post.assert_called_once()
 
+    @patch("apps.notifications.services.time.sleep")
+    @patch("apps.notifications.services.requests.post")
+    def test_webhook_retries_on_failure_then_succeeds(self, mock_post, mock_sleep):
+        from apps.notifications.models import Notification, WebhookEndpoint
+        from apps.notifications.services import NotificationService
+        import requests as req
+        mock_post.side_effect = [req.RequestException("fail"), MagicMock(status_code=200)]
+        WebhookEndpoint.objects.create(
+            user=self.user, url="https://retry.example.com/", secret="s", is_active=True
+        )
+        NotificationService.send(
+            user=self.user, title="Retry", body="Test", channels=["webhook"]
+        )
+        self.assertEqual(mock_post.call_count, 2)
+        self.assertTrue(Notification.objects.filter(recipient=self.user, title="Retry").exists())
+
+    @patch("apps.notifications.services.time.sleep")
+    @patch("apps.notifications.services.requests.post")
+    def test_webhook_no_record_when_all_attempts_fail(self, mock_post, mock_sleep):
+        from apps.notifications.models import Notification, WebhookEndpoint
+        from apps.notifications.services import NotificationService
+        import requests as req
+        mock_post.side_effect = req.RequestException("always fails")
+        WebhookEndpoint.objects.create(
+            user=self.user, url="https://fail.example.com/", secret="s", is_active=True
+        )
+        NotificationService.send(
+            user=self.user, title="AllFail", body="Test", channels=["webhook"]
+        )
+        self.assertEqual(mock_post.call_count, 4)
+        self.assertFalse(Notification.objects.filter(recipient=self.user, title="AllFail").exists())
+
     @patch("apps.notifications.services.requests.post")
     def test_webhook_signature_header_present(self, mock_post):
         from apps.notifications.models import WebhookEndpoint

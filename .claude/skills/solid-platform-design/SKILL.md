@@ -7,19 +7,113 @@ description: Use when building any UI in solid_platform — tables, badges, form
 
 ## Principio rector
 
-**Primero buscar un componente nativo de Unfold. Si no existe, preguntar antes de inventar.**
-Nunca usar HTML/CSS manual cuando existe un componente Unfold equivalente.
+**Primero buscar un componente nativo de Unfold. Si no existe, buscar en los componentes custom del proyecto. Si tampoco existe, preguntar antes de inventar.**
+Nunca usar HTML/CSS manual cuando existe un componente equivalente (Unfold o custom).
 
 ```
 ¿Existe componente/helper Unfold para esto?
     SÍ → usarlo (ver catálogo completo abajo)
-    NO → ¿existe patrón ya usado en este proyecto?
-        SÍ → seguirlo
+    NO → ¿existe componente custom del proyecto en templates/unfold/components/?
+        SÍ → usarlo (ver catálogo de componentes custom abajo)
         NO → STOP: proponer 2-3 opciones al usuario antes de implementar
 ```
 
 Documentación oficial: https://unfoldadmin.com/docs/
 Demo oficial: https://demo.unfoldadmin.com/en/admin/
+
+---
+
+## COMPONENTES CUSTOM DEL PROYECTO
+
+Ubicación: `templates/unfold/components/`
+Invocación: `{% component "unfold/components/nombre.html" with param=valor %}{% endcomponent %}`
+Requieren: `{% load i18n unfold %}` en el template que los usa.
+
+Referencia completa: `docs/ui-components.md`
+
+### Catálogo
+
+| Componente | Archivo | Parámetros clave | Cuándo usarlo |
+|------------|---------|-----------------|---------------|
+| Toast | `toast.html` | *(ninguno — se registra una vez en base_site.html)* | Feedback de acciones HTMX. Activar desde Python: `response["HX-Trigger"] = json.dumps({"showToast": {"type": "success", "title": "...", "body": "..."}})` |
+| Confirm Dialog | `confirm_dialog.html` | `title`, `body`, `confirm_label`, `cancel_label`, `danger`, `confirm_text`, `action_url`, `hx_delete` | Confirmación antes de acción destructiva. Modo simple (botones) o estricto (escribir texto) |
+| Data List | `data_list.html` | `items` (list de dicts), `layout` (`horizontal`\|`grid`) | Mostrar campos etiqueta/valor de un objeto (detalle, ficha, modal) |
+| Empty State | `empty_state.html` | `icon`, `title`, `subtitle`, `action_label`, `action_url`, `class` | Estado vacío de listas, tablas o paneles |
+| Skeleton | `skeleton.html` | `type` (`lines`\|`table`), `rows`, `cols`, `avatar` | Placeholder de carga mientras HTMX espera respuesta |
+| Page Header | `page_header.html` | `title`, `subtitle`, `breadcrumbs` (list), slot para acciones | Cabecera de página con título, subtítulo, breadcrumbs y botones de acción |
+| Filter Tabs | `filter_tabs.html` | `tabs` (list con `label`, `url`, `active`, `count_url`, `badge_type`) | Tabs de filtro con contadores async (HTMX `hx-trigger="load"`) |
+| Stat Card | `stat_card.html` | `title`, `value`, `icon`, `icon_color`, `trend`, `trend_label`, `href` | KPI card en dashboards. Trend: positivo/negativo/cero |
+| Inline Edit | `inline_edit.html` | `value`, `field_name`, `patch_url`, `type` (`text`\|`select`\|`textarea`), `options` | Edición inline click-to-edit con HTMX PATCH |
+| Modal Content | `modal_content.html` | `title`, `subtitle`, `icon`, `size` (`sm`\|`md`\|`lg`\|`xl`), `footer`, `close_label` | Shell para contenido de modales cargados con HTMX |
+| Split Panel | `split_panel.html` | `detail_target`, `list_title`, `empty_icon`, `empty_title` | Layout master-detail 35/65. Lista izquierda, detalle HTMX derecho |
+| Copy to Clipboard | `copy_to_clipboard.html` | `value`, `label`, `show_value`, `truncate` | Valor copiable con feedback ícono ✓ por 2 segundos (Alpine.js) |
+
+### Reglas de uso
+
+- **Toast vs Django messages:** HTMX action sin redirect → Toast. Formulario con redirect → `{% include "unfold/helpers/messages.html" %}`.
+- **Inline Edit:** El endpoint debe recibir PATCH y retornar el componente completo con `outerHTML` swap para reinicializar Alpine.
+- **Skeleton:** Usar con `hx-trigger="load"` en un contenedor HTMX — reemplazado por el contenido real.
+- **Filter Tabs:** `count_url` debe retornar texto plano (solo el número, sin HTML).
+- **Copy to Clipboard:** Requiere HTTPS o localhost (`navigator.clipboard` API).
+- **Modal Content:** El partial de la vista no lleva `{% extends %}` — solo `{% load i18n unfold %}`.
+- **Split Panel:** Reutiliza `empty_state.html` para el estado inicial del panel derecho.
+- **Confirm Dialog — modo estricto:** Pasar `confirm_text="ELIMINAR"` para requerir que el usuario escriba ese texto antes de confirmar.
+
+### Toast — activación desde Django
+
+```python
+import json
+from django.http import HttpResponse
+
+def mi_accion_htmx(request):
+    # ... lógica ...
+    response = HttpResponse()
+    response["HX-Trigger"] = json.dumps({
+        "showToast": {"type": "success", "title": "Guardado", "body": "Los cambios fueron guardados."}
+    })
+    return response
+```
+
+Tipos disponibles: `success`, `error`, `warning`, `info`.
+
+### Data List — estructura de items
+
+```python
+context["items"] = [
+    {"label": _("Nombre"), "value": obj.name, "type": "text"},
+    {"label": _("Estado"), "value": obj.status, "type": "badge", "badge_type": "success"},
+    {"label": _("Fecha"), "value": obj.created_at, "type": "date"},
+    {"label": _("ID"), "value": obj.uuid, "type": "mono"},
+    {"label": _("URL"), "value": "https://...", "type": "link", "link_label": _("Ver")},
+]
+```
+
+### Filter Tabs — estructura en vista
+
+```python
+context["filter_tabs"] = [
+    {"label": _("Todos"), "url": "?", "active": not request.GET.get("estado"),
+     "count_url": "/api/counts/?estado=all", "badge_type": "neutral"},
+    {"label": _("Activos"), "url": "?estado=active", "active": request.GET.get("estado") == "active",
+     "count_url": "/api/counts/?estado=active", "badge_type": "success"},
+]
+```
+
+### Stat Card — uso en dashboard
+
+```python
+context["stats"] = [
+    {"title": _("Usuarios"), "value": "1,234", "icon": "group",
+     "icon_color": "primary", "trend": 12, "trend_label": _("vs mes anterior")},
+]
+```
+
+```django
+{% for stat in stats %}
+  {% component "unfold/components/stat_card.html" with title=stat.title value=stat.value icon=stat.icon icon_color=stat.icon_color trend=stat.trend trend_label=stat.trend_label %}
+  {% endcomponent %}
+{% endfor %}
+```
 
 ---
 
@@ -164,11 +258,11 @@ Para tablas en vistas custom con badges por celda (patrón `translations/job_lis
 | Centrado | `text-center` |
 | Truncado | `max-w-xs truncate` |
 
-Valor vacío: usar `—` (em dash). Estado vacío:
+Valor vacío: usar `—` (em dash). Estado vacío — usar el componente custom:
 ```django
-<div class="border border-base-200 dark:border-base-800 rounded-default p-8 text-center bg-white dark:bg-base-900">
-    <p class="text-gray-500 dark:text-gray-400">{% trans "No se encontraron registros." %}</p>
-</div>
+{% component "unfold/components/empty_state.html"
+   with icon="search_off" title=_("Sin resultados") subtitle=_("No se encontraron registros.") %}
+{% endcomponent %}
 ```
 
 ---
@@ -343,32 +437,17 @@ path("modal/<int:pk>/", mi_modal_view, name="mi_modal"),
 </button>
 ```
 
-**Template del modal** (`mi_modal.html`) — partial sin `extends`, botón cerrar con `x-on:click="openModal = false"`:
+**Template del modal** (`mi_modal.html`) — usar el componente custom `modal_content.html`:
 ```django
 {% load i18n unfold %}
 
-<div class="bg-white dark:bg-base-900 rounded-default p-6">
-    {# Header #}
-    <div class="flex items-start justify-between mb-6 pb-4 border-b border-base-200 dark:border-base-700">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ obj }}</h2>
-        <button type="button" x-on:click="openModal = false"
-                class="p-1.5 rounded-default text-gray-400 hover:bg-base-100 dark:hover:bg-base-800 transition-colors">
-            <span class="material-symbols-outlined text-xl leading-none">close</span>
-        </button>
-    </div>
-
-    {# Contenido #}
-    ...
-
-    {# Footer #}
-    <div class="pt-4 border-t border-base-200 dark:border-base-700 flex justify-end">
-        <button type="button" x-on:click="openModal = false"
-                class="px-4 py-2 text-sm font-medium rounded-default text-gray-600 dark:text-gray-300 hover:bg-base-100 dark:hover:bg-base-800 transition-colors">
-            {% trans "Close" %}
-        </button>
-    </div>
-</div>
+{% component "unfold/components/modal_content.html" with title=obj.nombre size="md" %}
+    {# Contenido del modal aquí #}
+    {% component "unfold/components/data_list.html" with items=items %}{% endcomponent %}
+{% endcomponent %}
 ```
+
+Parámetros de `modal_content.html`: `title`, `subtitle`, `icon`, `size` (sm/md/lg/xl, default md), `footer` (HTML), `close_label`.
 
 ### Loading indicator en el trigger
 
@@ -520,12 +599,22 @@ Todo texto visible al usuario en `{% trans %}` / `_()`. Idiomas: `es` (default),
 
 ## 15. Filter Tabs en vistas custom
 
-Patrón establecido en `translations/job_list.html`:
+Usar el componente custom `filter_tabs.html` — incluye contadores async via HTMX:
 
 ```django
-<nav id="tabs-items" class="bg-base-100 flex flex-row font-medium gap-1 p-1 rounded-default text-important md:w-auto *:flex *:flex-row *:gap-1 *:font-medium *:whitespace-nowrap *:items-center *:px-2.5 *:py-[5px] *:rounded-default *:hover:bg-base-700/[.06] dark:bg-white/[.06] *:dark:hover:bg-white/[.06] [&>.active]:bg-white [&>.active]:shadow-xs [&>.active]:dark:bg-base-700 [&>.active]:hover:bg-white [&>.active]:dark:hover:bg-base-700">
-    {% for tab in filter_tabs %}
-        <a href="{{ tab.url }}" class="{% if tab.active %}active{% endif %}">{{ tab.label }}</a>
-    {% endfor %}
-</nav>
+{% component "unfold/components/filter_tabs.html" with tabs=filter_tabs %}{% endcomponent %}
 ```
+
+Estructura de `filter_tabs` en la vista Python:
+```python
+context["filter_tabs"] = [
+    {"label": _("Todos"), "url": "?", "active": not request.GET.get("estado"),
+     "count_url": reverse("mi_app:count") + "?estado=all", "badge_type": "neutral"},
+    {"label": _("Activos"), "url": "?estado=active", "active": request.GET.get("estado") == "active",
+     "count_url": reverse("mi_app:count") + "?estado=active", "badge_type": "success"},
+]
+```
+
+El endpoint `count_url` debe retornar texto plano (solo el número). Si no hay contadores, omitir `count_url`.
+
+Badge types disponibles: `success`, `warning`, `danger`, `info`, `neutral` (default).

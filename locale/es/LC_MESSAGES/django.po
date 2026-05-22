@@ -1,18 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Spanish translations for Smart Admin FT.
+# Copyright (C) 2026
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Smart Admin FT\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-21 17:38+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2026-05-21 21:43+0000\n"
+"PO-Revision-Date: 2026-05-21 00:00+0000\n"
+"Last-Translator: Smart Admin FT\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,336 +17,299 @@ msgstr ""
 
 #: apps/audit/admin.py:24
 msgid "Evento"
-msgstr ""
+msgstr "Evento"
 
 #: apps/audit/admin.py:28
 msgid "Objeto"
-msgstr ""
+msgstr "Objeto"
 
 #: apps/audit/admin.py:32
 msgid "Cambios"
-msgstr ""
+msgstr "Cambios"
 
 #: apps/audit/apps.py:8
 msgid "Auditoría"
-msgstr ""
+msgstr "Auditoría"
 
 #: apps/audit/models.py:8
 msgid "Crear"
-msgstr ""
+msgstr "Crear"
 
 #: apps/audit/models.py:9
 msgid "Actualizar"
-msgstr ""
+msgstr "Actualizar"
 
 #: apps/audit/models.py:10
 msgid "Eliminar"
-msgstr ""
+msgstr "Eliminar"
 
 #: apps/audit/models.py:11
 msgid "Inicio de sesión"
-msgstr ""
+msgstr "Inicio de sesión"
 
 #: apps/audit/models.py:12
 msgid "Cierre de sesión"
-msgstr ""
+msgstr "Cierre de sesión"
 
 #: apps/audit/models.py:13
 msgid "Ver"
-msgstr ""
+msgstr "Ver"
 
 #: apps/audit/models.py:21 apps/notifications/models.py:57
 #: apps/permissions/models.py:38 apps/permissions/models.py:73
 msgid "usuario"
-msgstr ""
+msgstr "usuario"
 
 #: apps/audit/models.py:26
 msgid "acción"
-msgstr ""
+msgstr "acción"
 
 #: apps/audit/models.py:31
 msgid "modelo"
-msgstr ""
+msgstr "modelo"
 
 #: apps/audit/models.py:37
 msgid "ID objeto"
-msgstr ""
+msgstr "ID objeto"
 
 #: apps/audit/models.py:41
 msgid "representación del objeto"
-msgstr ""
+msgstr "representación del objeto"
 
 #: apps/audit/models.py:46
 msgid "cambios"
-msgstr ""
+msgstr "cambios"
 
 #: apps/audit/models.py:51
 msgid "dirección IP"
-msgstr ""
+msgstr "dirección IP"
 
 #: apps/audit/models.py:57
 msgid "user agent"
-msgstr ""
+msgstr "user agent"
 
 #: apps/audit/models.py:61
 msgid "fecha y hora"
-msgstr ""
+msgstr "fecha y hora"
 
 #: apps/audit/models.py:65
 msgid "registro de auditoría"
-msgstr ""
+msgstr "registro de auditoría"
 
 #: apps/audit/models.py:66
 msgid "registros de auditoría"
-msgstr ""
+msgstr "registros de auditoría"
 
-#: apps/clientes/admin.py:21
-msgid "Información"
-msgstr "Información"
+#: apps/config/admin.py:42
+msgid "Clave"
+msgstr "Clave"
 
-#: apps/clientes/admin.py:28 apps/clientes/admin.py:39
+#: apps/config/admin.py:49
+msgid "Tipo"
+msgstr "Tipo"
+
+#: apps/config/admin.py:58
+msgid "Visibilidad"
+msgstr "Visibilidad"
+
+#: apps/config/admin.py:63
+msgid "Pública"
+msgstr "Pública"
+
+#: apps/config/admin.py:67
+msgid "Privada"
+msgstr "Privada"
+
+#: apps/config/admin.py:70
+msgid "Descripción"
+msgstr "Descripción"
+
+#: apps/config/admin.py:76
+msgid "Valor"
+msgstr "Valor"
+
+#: apps/config/admin.py:83 apps/config/models.py:26
+msgid "tipo de valor"
+msgstr "tipo de valor"
+
+#: apps/config/admin.py:101 apps/config/admin.py:105
+msgid "Metadatos"
+msgstr "Metadatos"
+
+#: apps/config/apps.py:8
+msgid "Configuración"
+msgstr "Configuración"
+
+#: apps/config/forms.py:27
+msgid "Verdadero"
+msgstr "Verdadero"
+
+#: apps/config/forms.py:27
+msgid "Falso"
+msgstr "Falso"
+
+#: apps/config/forms.py:28 apps/config/forms.py:33 apps/config/models.py:19
+msgid "valor"
+msgstr "valor"
+
+#: apps/config/forms.py:29 apps/config/forms.py:34 apps/config/models.py:20
+msgid "Siempre almacenado como texto."
+msgstr "Siempre almacenado como texto."
+
+#: apps/config/models.py:7
+msgid "Texto"
+msgstr "Texto"
+
+#: apps/config/models.py:8
+msgid "Entero"
+msgstr "Entero"
+
+#: apps/config/models.py:9
+msgid "Booleano"
+msgstr "Booleano"
+
+#: apps/config/models.py:10
+msgid "JSON"
+msgstr "JSON"
+
+#: apps/config/models.py:15
+msgid "clave"
+msgstr "clave"
+
+#: apps/config/models.py:16
+msgid "Identificador único. Ej: max_upload_size"
+msgstr "Identificador único. Ej: max_upload_size"
+
+#: apps/config/models.py:30 apps/permissions/models.py:16
+msgid "descripción"
+msgstr "descripción"
+
+#: apps/config/models.py:31
+msgid "Propósito legible de esta configuración."
+msgstr "Propósito legible de esta configuración."
+
+#: apps/config/models.py:35
+msgid "pública"
+msgstr "pública"
+
+#: apps/config/models.py:36
+msgid "Si está marcada, se expone en el contexto de templates."
+msgstr "Si está marcada, se expone en el contexto de templates."
+
+#: apps/config/models.py:40
+msgid "configuración del sitio"
+msgstr "configuración del sitio"
+
+#: apps/config/models.py:41
+msgid "configuraciones del sitio"
+msgstr "configuraciones del sitio"
+
+#: apps/core/dashboard.py:30
+msgid "Lun"
+msgstr "Lun"
+
+#: apps/core/dashboard.py:30
+msgid "Mar"
+msgstr "Mar"
+
+#: apps/core/dashboard.py:30
+msgid "Mié"
+msgstr "Mié"
+
+#: apps/core/dashboard.py:30
+msgid "Jue"
+msgstr "Jue"
+
+#: apps/core/dashboard.py:30
+msgid "Vie"
+msgstr "Vie"
+
+#: apps/core/dashboard.py:30
+msgid "Sáb"
+msgstr "Sáb"
+
+#: apps/core/dashboard.py:30
+msgid "Dom"
+msgstr "Dom"
+
+#: apps/core/dashboard.py:34
+msgid "Actividad"
+msgstr "Actividad"
+
+#: apps/core/dashboard.py:67 config/settings/base.py:184
+msgid "Usuarios"
+msgstr "Usuarios"
+
+#: apps/core/dashboard.py:67
+msgid "Total registrados"
+msgstr "Total registrados"
+
+#: apps/core/dashboard.py:68 apps/notifications/apps.py:10
+#: config/settings/base.py:204 templates/partials/notifications_bell.html:12
+#: templates/partials/notifications_list.html:5
+msgid "Notificaciones"
+msgstr "Notificaciones"
+
+#: apps/core/dashboard.py:68
+msgid "Sin leer"
+msgstr "Sin leer"
+
+#: apps/core/dashboard.py:69
+msgid "Auditoría hoy"
+msgstr "Auditoría hoy"
+
+#: apps/core/dashboard.py:69
+msgid "Registros de hoy"
+msgstr "Registros de hoy"
+
+#: apps/core/dashboard.py:73
+msgid "Usuario"
+msgstr "Usuario"
+
+#: apps/core/dashboard.py:73 apps/notifications/models.py:9
+#: templates/registration/password_reset_form.html:19
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: apps/core/dashboard.py:73
+msgid "Registrado"
+msgstr "Registrado"
+
+#: apps/core/dashboard.py:80
+msgid "Acción"
+msgstr "Acción"
+
+#: apps/core/dashboard.py:80
+msgid "Modelo"
+msgstr "Modelo"
+
+#: apps/core/dashboard.py:80
+msgid "Fecha"
+msgstr "Fecha"
+
+#: apps/core/forms.py:19
+msgid "Username / Email"
+msgstr "Usuario / Correo electrónico"
+
+#: apps/erp_sync/apps.py:8
+msgid "Sincronización ERP"
+msgstr "Sincronización ERP"
+
+#: apps/notifications/admin.py:22
+msgid "Mensaje"
+msgstr "Mensaje"
+
 #: apps/notifications/admin.py:26
 msgid "Estado"
 msgstr "Estado"
 
-#: apps/clientes/admin.py:48
-msgid "Marcar como inactivo"
-msgstr "Marcar como inactivo"
-
-#: apps/clientes/apps.py:8 config/settings/base.py:228
-#: config/settings/base.py:233
-msgid "Clientes"
-msgstr "Clientes"
-
-#: apps/clientes/models.py:7 apps/notifications/admin.py:100
-msgid "Activo"
-msgstr "Activo"
-
-#: apps/clientes/models.py:8
-msgid "Inactivo"
-msgstr "Inactivo"
-
-#: apps/clientes/models.py:10 apps/permissions/models.py:12
-msgid "nombre"
-msgstr "Nombre"
-
-#: apps/clientes/models.py:11
-msgid "email"
-msgstr "Email"
-
-#: apps/clientes/models.py:15
-msgid "teléfono"
-msgstr "Teléfono"
-
-#: apps/clientes/models.py:21
-msgid "estado"
-msgstr "Estado"
-
-#: apps/clientes/models.py:23
-msgid "creado el"
-msgstr "Creado el"
-
-#: apps/clientes/models.py:26
-msgid "cliente"
-msgstr "Cliente"
-
-#: apps/clientes/models.py:27
-msgid "clientes"
-msgstr "Clientes"
-
-#: apps/clientes/services.py:19
-msgid "Nuevo cliente registrado"
-msgstr "Nuevo cliente registrado"
-
-#: apps/clientes/services.py:20
-#, python-format
-msgid "Se registró el cliente: %(nombre)s"
-msgstr "Se registró el cliente: %(nombre)s"
-
-#: apps/config/admin.py:42
-msgid "Clave"
-msgstr ""
-
-#: apps/config/admin.py:49
-msgid "Tipo"
-msgstr ""
-
-#: apps/config/admin.py:58
-msgid "Visibilidad"
-msgstr ""
-
-#: apps/config/admin.py:63
-msgid "Pública"
-msgstr ""
-
-#: apps/config/admin.py:67
-msgid "Privada"
-msgstr ""
-
-#: apps/config/admin.py:70
-msgid "Descripción"
-msgstr ""
-
-#: apps/config/admin.py:76
-msgid "Valor"
-msgstr ""
-
-#: apps/config/admin.py:83 apps/config/models.py:26
-msgid "tipo de valor"
-msgstr ""
-
-#: apps/config/admin.py:101 apps/config/admin.py:105
-msgid "Metadatos"
-msgstr ""
-
-#: apps/config/apps.py:8
-msgid "Configuración"
-msgstr ""
-
-#: apps/config/forms.py:27
-msgid "Verdadero"
-msgstr ""
-
-#: apps/config/forms.py:27
-msgid "Falso"
-msgstr ""
-
-#: apps/config/forms.py:28 apps/config/forms.py:33 apps/config/models.py:19
-msgid "valor"
-msgstr ""
-
-#: apps/config/forms.py:29 apps/config/forms.py:34 apps/config/models.py:20
-msgid "Siempre almacenado como texto."
-msgstr ""
-
-#: apps/config/models.py:7
-msgid "Texto"
-msgstr ""
-
-#: apps/config/models.py:8
-msgid "Entero"
-msgstr ""
-
-#: apps/config/models.py:9
-msgid "Booleano"
-msgstr ""
-
-#: apps/config/models.py:10
-msgid "JSON"
-msgstr ""
-
-#: apps/config/models.py:15
-msgid "clave"
-msgstr ""
-
-#: apps/config/models.py:16
-msgid "Identificador único. Ej: max_upload_size"
-msgstr ""
-
-#: apps/config/models.py:30 apps/permissions/models.py:16
-msgid "descripción"
-msgstr ""
-
-#: apps/config/models.py:31
-msgid "Propósito legible de esta configuración."
-msgstr ""
-
-#: apps/config/models.py:35
-msgid "pública"
-msgstr ""
-
-#: apps/config/models.py:36
-msgid "Si está marcada, se expone en el contexto de templates."
-msgstr ""
-
-#: apps/config/models.py:40
-msgid "configuración del sitio"
-msgstr ""
-
-#: apps/config/models.py:41
-msgid "configuraciones del sitio"
-msgstr ""
-
-#: apps/core/dashboard.py:44 config/settings/base.py:185
-msgid "Usuarios"
-msgstr "Usuarios"
-
-#: apps/core/dashboard.py:44
-msgid "Total registrados"
-msgstr ""
-
-#: apps/core/dashboard.py:45 apps/notifications/apps.py:8
-#: config/settings/base.py:205 templates/partials/notifications_bell.html:12
-#: templates/partials/notifications_list.html:5
-msgid "Notificaciones"
-msgstr ""
-
-#: apps/core/dashboard.py:45
-msgid "Sin leer"
-msgstr ""
-
-#: apps/core/dashboard.py:46
-msgid "Auditoría hoy"
-msgstr ""
-
-#: apps/core/dashboard.py:46
-#, fuzzy
-#| msgid "Registros de auditoría"
-msgid "Registros de hoy"
-msgstr "Registros de auditoría"
-
-#: apps/core/dashboard.py:47
-msgid "Clientes activos"
-msgstr "Clientes activos"
-
-#: apps/core/dashboard.py:47
-msgid "Total activos"
-msgstr "Total activos"
-
-#: apps/core/dashboard.py:50
-#, fuzzy
-#| msgid "Usuarios"
-msgid "Usuario"
-msgstr "Usuarios"
-
-#: apps/core/dashboard.py:50 apps/notifications/models.py:9
-#: templates/registration/password_reset_form.html:19
-msgid "Email"
-msgstr ""
-
-#: apps/core/dashboard.py:50
-#, fuzzy
-#| msgid "Registros de auditoría"
-msgid "Registrado"
-msgstr "Registros de auditoría"
-
-#: apps/core/dashboard.py:57
-msgid "Acción"
-msgstr ""
-
-#: apps/core/dashboard.py:57
-msgid "Modelo"
-msgstr ""
-
-#: apps/core/dashboard.py:57
-msgid "Fecha"
-msgstr ""
-
-#: apps/core/forms.py:19
-msgid "Username / Email"
-msgstr ""
-
-#: apps/notifications/admin.py:22
-msgid "Mensaje"
-msgstr ""
-
 #: apps/notifications/admin.py:30
 msgid "Payload"
-msgstr ""
+msgstr "Datos enviados"
 
 #: apps/notifications/admin.py:36
 msgid "Marcar seleccionadas como leídas"
-msgstr ""
+msgstr "Marcar seleccionadas como leídas"
 
 #: apps/notifications/admin.py:60
 msgid "Endpoint"
@@ -360,6 +320,8 @@ msgid ""
 "El sistema enviará un HTTP POST a esta URL cada vez que se dispare una "
 "notificación con <code>channel='webhook'</code> para el usuario seleccionado."
 msgstr ""
+"El sistema enviará un HTTP POST a esta URL cada vez que se dispare una "
+"notificación con <code>channel='webhook'</code> para el usuario seleccionado."
 
 #: apps/notifications/admin.py:70
 msgid "Seguridad"
@@ -371,204 +333,213 @@ msgid ""
 "sha256=&lt;hmac&gt;</code> firmado con HMAC-SHA256. Ver la guía de "
 "integración abajo para verificarlo en tu receptor."
 msgstr ""
+"Si se configura un secreto, cada POST incluirá el header <code>X-Signature: "
+"sha256=&lt;hmac&gt;</code> firmado con HMAC-SHA256. Ver la guía de "
+"integración abajo para verificarlo en tu receptor."
 
 #: apps/notifications/admin.py:82 apps/notifications/models.py:59
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: apps/notifications/admin.py:93
 msgid "Firmado"
 msgstr "Firmado"
 
+#: apps/notifications/admin.py:100
+msgid "Activo"
+msgstr "Activo"
+
 #: apps/notifications/models.py:8
 msgid "En la app"
-msgstr ""
+msgstr "En la app"
 
 #: apps/notifications/models.py:10
 msgid "Webhook"
-msgstr ""
+msgstr "Webhook"
 
 #: apps/notifications/models.py:16
 msgid "destinatario"
-msgstr ""
+msgstr "destinatario"
 
 #: apps/notifications/models.py:18
 msgid "título"
-msgstr ""
+msgstr "título"
 
 #: apps/notifications/models.py:19
 msgid "cuerpo"
-msgstr ""
+msgstr "cuerpo"
 
 #: apps/notifications/models.py:23
 msgid "canal"
-msgstr ""
+msgstr "canal"
 
 #: apps/notifications/models.py:28
 msgid "leída el"
-msgstr ""
+msgstr "leída el"
 
 #: apps/notifications/models.py:33
 msgid "enviada el"
-msgstr ""
+msgstr "enviada el"
 
 #: apps/notifications/models.py:38
 msgid "payload"
-msgstr ""
+msgstr "datos enviados"
 
 #: apps/notifications/models.py:39
 msgid "Datos adicionales para webhooks."
-msgstr ""
+msgstr "Datos adicionales para webhooks."
 
 #: apps/notifications/models.py:41
 msgid "creada el"
-msgstr ""
+msgstr "creada el"
 
 #: apps/notifications/models.py:44
 msgid "notificación"
-msgstr ""
+msgstr "notificación"
 
 #: apps/notifications/models.py:45
 msgid "notificaciones"
-msgstr ""
+msgstr "notificaciones"
 
 #: apps/notifications/models.py:60
 msgid "activo"
-msgstr ""
+msgstr "activo"
 
 #: apps/notifications/models.py:64
 msgid "secreto"
-msgstr ""
+msgstr "secreto"
 
 #: apps/notifications/models.py:65
 msgid "Usado para firmar el payload con HMAC-SHA256."
-msgstr ""
+msgstr "Usado para firmar el payload con HMAC-SHA256."
 
 #: apps/notifications/models.py:69
 msgid "endpoint webhook"
-msgstr ""
+msgstr "endpoint webhook"
 
 #: apps/notifications/models.py:70
 msgid "endpoints webhook"
-msgstr ""
+msgstr "endpoints webhook"
 
 #: apps/permissions/admin.py:17
 msgid "rol asignado"
-msgstr ""
+msgstr "rol asignado"
 
 #: apps/permissions/admin.py:18
 msgid "roles asignados"
-msgstr ""
+msgstr "roles asignados"
 
 #: apps/permissions/admin.py:30
 msgid "usuarios"
-msgstr ""
+msgstr "usuarios"
 
 #: apps/permissions/apps.py:8
 msgid "Permisos y roles"
-msgstr ""
+msgstr "Permisos y roles"
+
+#: apps/permissions/models.py:12
+msgid "nombre"
+msgstr "nombre"
 
 #: apps/permissions/models.py:21
 msgid "permisos"
-msgstr ""
+msgstr "permisos"
 
 #: apps/permissions/models.py:25 apps/permissions/models.py:44
 msgid "rol"
-msgstr ""
+msgstr "rol"
 
 #: apps/permissions/models.py:26
 msgid "roles"
-msgstr ""
+msgstr "roles"
 
 #: apps/permissions/models.py:48
 msgid "asignado el"
-msgstr ""
+msgstr "asignado el"
 
 #: apps/permissions/models.py:56
 msgid "asignado por"
-msgstr ""
+msgstr "asignado por"
 
 #: apps/permissions/models.py:60
 msgid "rol de usuario"
-msgstr ""
+msgstr "rol de usuario"
 
 #: apps/permissions/models.py:61
 msgid "roles de usuario"
-msgstr ""
+msgstr "roles de usuario"
 
 #: apps/permissions/models.py:78
 msgid "tipo de contenido"
-msgstr ""
+msgstr "tipo de contenido"
 
 #: apps/permissions/models.py:82
 msgid "ID del objeto"
-msgstr ""
+msgstr "ID del objeto"
 
 #: apps/permissions/models.py:87
 msgid "permiso"
-msgstr ""
+msgstr "permiso"
 
 #: apps/permissions/models.py:91
 msgid "permiso por objeto"
-msgstr ""
+msgstr "permiso por objeto"
 
 #: apps/permissions/models.py:92
 msgid "permisos por objeto"
-msgstr ""
+msgstr "permisos por objeto"
 
-#: config/settings/base.py:180
+#: config/settings/base.py:179
 msgid "Administración"
 msgstr "Administración"
 
-#: config/settings/base.py:190
+#: config/settings/base.py:189
 msgid "Roles"
 msgstr "Roles"
 
-#: config/settings/base.py:195
+#: config/settings/base.py:194
 msgid "Roles de usuario"
 msgstr "Roles de usuario"
 
-#: config/settings/base.py:200
+#: config/settings/base.py:199
 msgid "Permisos por objeto"
 msgstr "Permisos por objeto"
 
-#: config/settings/base.py:210
+#: config/settings/base.py:209
 msgid "Endpoints webhook"
 msgstr "Endpoints webhook"
 
-#: config/settings/base.py:215
+#: config/settings/base.py:214
 msgid "Configuraciones del sitio"
 msgstr "Configuraciones del sitio"
 
-#: config/settings/base.py:220
+#: config/settings/base.py:219
 msgid "Registros de auditoría"
 msgstr "Registros de auditoría"
 
 #: templates/admin/index.html:4 templates/admin/login.html:15
 msgid "Django site admin"
-msgstr ""
+msgstr "Panel de administración"
 
 #: templates/admin/index.html:25 templates/partials/dashboard_chart.html:7
 msgid "Actividad (ejemplo)"
-msgstr ""
+msgstr "Actividad"
 
 #: templates/admin/index.html:28
 msgid "Placeholder — reemplazar con datos reales en apps/core/dashboard.py"
-msgstr ""
+msgstr "Últimos 7 días"
 
 #: templates/admin/index.html:36
-#, fuzzy
-#| msgid "Roles de usuario"
 msgid "Últimos usuarios"
-msgstr "Roles de usuario"
+msgstr "Últimos usuarios"
 
 #: templates/admin/index.html:40
 msgid "Auditoría reciente"
-msgstr ""
+msgstr "Auditoría reciente"
 
 #: templates/admin/login.html:15
 msgid "Welcome back to"
-msgstr ""
+msgstr "Bienvenido a"
 
 #: templates/admin/login.html:26
 #, python-format
@@ -576,33 +547,37 @@ msgid ""
 "You are authenticated as %(username)s, but are not authorized to access this "
 "page. Would you like to login to a different account?"
 msgstr ""
+"Estás autenticado como %(username)s, pero no tienes acceso a esta página. "
+"¿Deseas iniciar sesión con otra cuenta?"
 
 #: templates/admin/login.html:47 templates/core/request_access.html:39
 #: templates/registration/password_reset_complete.html:13
 msgid "Log in"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: templates/admin/login.html:55
 msgid "Forgotten your password or username?"
-msgstr ""
+msgstr "¿Olvidaste tu contraseña o usuario?"
 
 #: templates/admin/login.html:64 templates/core/request_access.html:5
 msgid "Request Access"
-msgstr ""
+msgstr "Solicitar acceso"
 
 #: templates/core/request_access.html:7
 msgid ""
 "If you are a registered collaborator in the ERP, enter your email and we "
 "will send you a link to activate your account."
 msgstr ""
+"Si eres un colaborador registrado en el ERP, ingresa tu correo y te "
+"enviaremos un enlace para activar tu cuenta."
 
 #: templates/core/request_access.html:33
 msgid "Send link"
-msgstr ""
+msgstr "Enviar enlace"
 
 #: templates/core/request_access.html:38
 msgid "Already have an account?"
-msgstr ""
+msgstr "¿Ya tienes una cuenta?"
 
 #: templates/notifications/webhook_endpoint_guide.html:5
 msgid "Guía de integración"
@@ -634,77 +609,80 @@ msgstr ""
 
 #: templates/partials/dashboard_chart.html:10
 msgid "Placeholder — reemplazar con datos reales"
-msgstr ""
+msgstr "Últimos 7 días"
 
 #: templates/partials/notifications_list.html:12
 msgid "atrás"
-msgstr ""
+msgstr "atrás"
 
 #: templates/partials/notifications_list.html:15
 msgid "Sin notificaciones nuevas"
-msgstr ""
+msgstr "Sin notificaciones nuevas"
 
 #: templates/partials/notifications_list.html:21
 msgid "Ver todas"
-msgstr ""
+msgstr "Ver todas"
 
 #: templates/registration/password_reset_complete.html:5
 msgid "Password updated!"
-msgstr ""
+msgstr "¡Contraseña actualizada!"
 
 #: templates/registration/password_reset_complete.html:7
 msgid "Your password was saved successfully. You can now log in."
-msgstr ""
+msgstr "Tu contraseña fue guardada correctamente. Ya puedes iniciar sesión."
 
 #: templates/registration/password_reset_confirm.html:5
 msgid "Set new password"
-msgstr ""
+msgstr "Establecer nueva contraseña"
 
 #: templates/registration/password_reset_confirm.html:9
 msgid "Enter your new password twice to verify it's correct."
-msgstr ""
+msgstr "Ingresa tu nueva contraseña dos veces para confirmarla."
 
 #: templates/registration/password_reset_confirm.html:14
 #: templates/registration/password_reset_form.html:12
 msgid "Please correct the errors below."
-msgstr ""
+msgstr "Por favor corrige los errores indicados."
 
 #: templates/registration/password_reset_confirm.html:32
 msgid "Save password"
-msgstr ""
+msgstr "Guardar contraseña"
 
 #: templates/registration/password_reset_confirm.html:37
 msgid "The link is no longer valid. It may have already been used or expired."
-msgstr ""
+msgstr "El enlace ya no es válido. Puede haber sido usado o haber expirado."
 
 #: templates/registration/password_reset_confirm.html:41
 msgid "Request a new link"
-msgstr ""
+msgstr "Solicitar un nuevo enlace"
 
 #: templates/registration/password_reset_done.html:5
 msgid "Check your email"
-msgstr ""
+msgstr "Revisa tu correo"
 
 #: templates/registration/password_reset_done.html:7
 msgid ""
 "We sent you instructions to recover your password. If you don't see it, "
 "check your spam folder."
 msgstr ""
+"Te enviamos instrucciones para recuperar tu contraseña. Si no lo ves, "
+"revisa tu carpeta de spam."
 
 #: templates/registration/password_reset_done.html:12
 #: templates/registration/password_reset_form.html:34
 msgid "Back to login"
-msgstr ""
+msgstr "Volver al inicio de sesión"
 
 #: templates/registration/password_reset_form.html:5
 msgid "Recover password"
-msgstr ""
+msgstr "Recuperar contraseña"
 
 #: templates/registration/password_reset_form.html:7
 msgid ""
 "Enter your email and we will send you instructions to set a new password."
 msgstr ""
+"Ingresa tu correo y te enviaremos instrucciones para establecer una nueva contraseña."
 
 #: templates/registration/password_reset_form.html:28
 msgid "Reset my password"
-msgstr ""
+msgstr "Restablecer mi contraseña"

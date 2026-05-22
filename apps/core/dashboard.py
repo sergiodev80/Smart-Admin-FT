@@ -1,6 +1,9 @@
 import json
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +15,28 @@ class _Table:
     def __init__(self, headers, rows):
         self.headers = headers
         self.rows = rows
+
+
+def _audit_chart_data() -> dict:
+    from apps.audit.models import AuditLog
+    today = timezone.now().date()
+    days = [today - timedelta(days=i) for i in range(6, -1, -1)]
+    counts = {
+        row["day"]: row["total"]
+        for row in AuditLog.objects.filter(
+            timestamp__date__gte=days[0]
+        ).annotate(day=TruncDate("timestamp")).values("day").annotate(total=Count("id"))
+    }
+    day_names = [_("Lun"), _("Mar"), _("Mié"), _("Jue"), _("Vie"), _("Sáb"), _("Dom")]
+    return {
+        "labels": [str(day_names[d.weekday()]) for d in days],
+        "datasets": [{
+            "label": str(_("Actividad")),
+            "data": [counts.get(d, 0) for d in days],
+            "backgroundColor": "var(--color-primary-500)",
+            "borderRadius": 4,
+        }],
+    }
 
 
 def dashboard_callback(request, context):
@@ -58,15 +83,6 @@ def dashboard_callback(request, context):
                 for log in recent_audit_qs
             ],
         ),
-        # PROYECTO: reemplaza con datos reales. Formato Chart.js estándar.
-        "chart_data": json.dumps({
-            "labels": ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
-            "datasets": [{
-                "label": "Actividad",
-                "data": [12, 19, 8, 15, 22, 6, 10],
-                "backgroundColor": "var(--color-primary-500)",
-                "borderRadius": 4,
-            }],
-        }),
+        "chart_data": json.dumps(_audit_chart_data()),
     })
     return context

@@ -1,0 +1,84 @@
+{% load i18n unfold %}
+{#
+  Modal content shell — reutilizable con HTMX + Alpine openModal.
+
+  Parámetros:
+    title       — string: título del modal (requerido)
+    subtitle    — string: subtítulo opcional bajo el título
+    icon        — string: Material Symbol icon name (opcional)
+    size        — "sm" | "md" (default) | "lg" | "xl" — ancho del panel
+    footer      — boolean: mostrar footer con botón Cerrar (default True)
+    close_label — string: texto del botón cerrar (default "Cerrar")
+
+  Uso:
+    {% component "unfold/components/modal_content.html" with title=_("Mi título") icon="info" %}
+        <p>Contenido aquí</p>
+    {% endcomponent %}
+
+  El trigger en el template padre:
+    <button hx-get="{% url 'mi_url' %}" hx-target="#modal-content" hx-swap="innerHTML">
+        Abrir
+    </button>
+
+  Script requerido una vez en el template padre ({% block extrahead %}):
+    document.addEventListener("htmx:afterSwap", (e) => {
+        if (e.detail.target.id === "modal-content") {
+            Alpine.$data(document.body).openModal = true;
+        }
+    });
+#}
+
+{% with size=size|default:"md" %}
+{% with close_label=close_label|default:_("Cerrar") %}
+
+<div class="bg-white dark:bg-base-900 rounded-default flex flex-col max-h-[90vh]
+            {% if size == 'sm' %}max-w-sm
+            {% elif size == 'lg' %}max-w-2xl
+            {% elif size == 'xl' %}max-w-4xl
+            {% else %}max-w-lg
+            {% endif %} w-full mx-auto">
+
+    {# Header #}
+    <div class="flex items-start justify-between px-6 py-4 border-b border-base-200 dark:border-base-700 flex-shrink-0">
+        <div class="flex items-center gap-3">
+            {% if icon %}
+                <span class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-xl">{{ icon }}</span>
+            {% endif %}
+            <div>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white leading-tight">{{ title }}</h2>
+                {% if subtitle %}
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ subtitle }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <button type="button"
+                x-on:click="openModal = false"
+                class="p-1.5 rounded-default text-gray-400 hover:bg-base-100 dark:hover:bg-base-800 transition-colors flex-shrink-0 ml-4">
+            <span class="material-symbols-outlined text-xl leading-none">close</span>
+        </button>
+    </div>
+
+    {# Body — scrollable #}
+    <div class="px-6 py-5 overflow-y-auto flex-1">
+        {% block modal_body %}
+            {{ component_content }}
+        {% endblock %}
+    </div>
+
+    {# Footer #}
+    {% if footer != False %}
+    <div class="px-6 py-4 border-t border-base-200 dark:border-base-700 flex justify-end gap-3 flex-shrink-0">
+        {% block modal_footer %}
+            <button type="button"
+                    x-on:click="openModal = false"
+                    class="px-4 py-2 text-sm font-medium rounded-default text-gray-600 dark:text-gray-300 hover:bg-base-100 dark:hover:bg-base-800 transition-colors">
+                {{ close_label }}
+            </button>
+        {% endblock %}
+    </div>
+    {% endif %}
+
+</div>
+
+{% endwith %}
+{% endwith %}
