@@ -1,5 +1,5 @@
 {% load i18n %}
-{#
+<!--
   Cabecera de página reutilizable para vistas custom fuera del admin estándar.
 
   Parámetros:
@@ -11,15 +11,15 @@
   Slot de acciones: usa {{ component_content }} para botones/links.
 
   Uso sin breadcrumb:
-    {% component "unfold/components/page_header.html"
-       with title=_("Usuarios") subtitle=_("Gestión de accesos") %}
+    [component "unfold/components/page_header.html"
+       with title=_("Usuarios") subtitle=_("Gestión de accesos")]
       <a href="/admin/core/user/add/">+ Crear</a>
-    {% endcomponent %}
+    [endcomponent]
 
   Uso con breadcrumb:
-    {% component "unfold/components/page_header.html"
-       with title=_("Sergio") breadcrumbs=crumbs %}
-    {% endcomponent %}
+    [component "unfold/components/page_header.html"
+       with title=_("Sergio") breadcrumbs=crumbs]
+    [endcomponent]
 
   Estructura de breadcrumbs:
     context["crumbs"] = [
@@ -27,7 +27,7 @@
         {"label": _("Usuarios"), "url": "/admin/core/user/"},
         {"label": "Sergio Rodríguez"},  # sin url = activo
     ]
-#}
+-->
 
 <div class="mb-6 border-b border-base-200 dark:border-base-700 pb-4">
 

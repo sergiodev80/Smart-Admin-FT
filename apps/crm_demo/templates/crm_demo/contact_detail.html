@@ -1,0 +1,157 @@
+{% load i18n unfold crm_tags %}
+
+<div style="padding:1.5rem">
+
+  {# Header del detalle #}
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem">
+    <div>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ contact.name }}</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400">{{ contact.get_status_display }}</p>
+    </div>
+    {# Confirm dialog para eliminar — inline HTML para evitar conflicto de component slot #}
+    <div x-data="{ openModal: false, input: '' }">
+      <button
+        type="button"
+        x-on:click="openModal = true; input = ''"
+        class="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 border border-red-200 rounded-default hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+        <span class="material-symbols-outlined text-sm leading-none">delete</span>
+        {% trans "Eliminar" %}
+      </button>
+      <template x-if="openModal">
+        <div class="fixed inset-0 z-50 flex items-center justify-center"
+             style="background:rgba(0,0,0,0.5)"
+             x-on:click.self="openModal = false">
+          <div style="z-index:51;width:28rem;max-width:90vw" class="bg-white dark:bg-base-900 rounded-default shadow-xl">
+            <div class="flex items-start justify-between px-6 py-4 border-b border-base-200 dark:border-base-700">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-xl text-red-500">delete</span>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white">{% trans "Eliminar contacto" %}</h2>
+              </div>
+              <button type="button" x-on:click="openModal = false"
+                      class="p-1.5 rounded-default text-gray-400 hover:bg-base-100 dark:hover:bg-base-800 transition-colors ml-4">
+                <span class="material-symbols-outlined text-xl leading-none">close</span>
+              </button>
+            </div>
+            <div class="px-6 py-5">
+              <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                {% blocktrans with email=contact.email %}Escribe <strong>{{ email }}</strong> para confirmar la eliminación.{% endblocktrans %}
+              </p>
+              <input type="text" x-model="input" placeholder="{{ contact.email }}"
+                     class="w-full border border-base-200 dark:border-base-700 rounded-default px-3 py-2 text-sm bg-white dark:bg-base-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                     autocomplete="off">
+            </div>
+            <div class="px-6 py-4 border-t border-base-200 dark:border-base-700 flex justify-end gap-3">
+              <button type="button" x-on:click="openModal = false"
+                      class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-base-100 dark:hover:bg-base-800 rounded-default transition-colors">
+                {% trans "Cancelar" %}
+              </button>
+              <form method="post" action="{{ contact|url_contact_delete }}" class="inline">
+                {% csrf_token %}
+                <button type="submit"
+                        :disabled="input !== '{{ contact.email }}'"
+                        :class="input === '{{ contact.email }}' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gray-200 dark:bg-base-700 text-gray-400 cursor-not-allowed'"
+                        class="px-4 py-2 text-sm font-medium rounded-default transition-colors">
+                  {% trans "Eliminar" %}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  {# Data list — campos del contacto #}
+  {% component "unfold/components/data_list.html" with items=items %}{% endcomponent %}
+
+  {# Copy to clipboard — ID y email #}
+  <div style="display:flex;gap:1rem;margin-top:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+    {% component "unfold/components/copy_to_clipboard.html" with value=contact.pk|stringformat:"s" label="ID" %}{% endcomponent %}
+    {% component "unfold/components/copy_to_clipboard.html" with value=contact.email label="Email" truncate=True %}{% endcomponent %}
+  </div>
+
+  {# Historial de compras #}
+  <div style="margin-bottom:1.5rem">
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
+      <span class="material-symbols-outlined text-base leading-none">shopping_cart</span>
+      {% trans "Compras" %}
+    </h3>
+    {% if purchases %}
+      <div style="display:flex;flex-direction:column;gap:0.5rem">
+        {% for purchase in purchases %}
+          <div class="bg-base-50 dark:bg-base-800 rounded-default px-3 py-2 text-sm flex items-center justify-between">
+            <span class="font-medium text-primary-600 dark:text-primary-400">${{ purchase.amount }}</span>
+            <span class="text-gray-600 dark:text-gray-300 flex-1 mx-3">{{ purchase.description }}</span>
+            <span class="text-gray-400 text-xs">{{ purchase.date }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% component "unfold/components/empty_state.html" with icon="shopping_cart" title=_("Sin compras registradas") %}{% endcomponent %}
+    {% endif %}
+  </div>
+
+  {# Historial de emails #}
+  <div style="margin-bottom:1.5rem">
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
+      <span class="material-symbols-outlined text-base leading-none">email</span>
+      {% trans "Emails" %}
+    </h3>
+    {% if email_logs %}
+      <div style="display:flex;flex-direction:column;gap:0.5rem">
+        {% for log in email_logs %}
+          <div class="bg-base-50 dark:bg-base-800 rounded-default px-3 py-2 text-sm">
+            <span class="font-medium">{{ log.subject }}</span>
+            <span class="text-xs text-gray-400 ml-2">{{ log.get_direction_display }} · {{ log.date|date:"d/m/Y H:i" }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% component "unfold/components/empty_state.html" with icon="email" title=_("Sin emails registrados") %}{% endcomponent %}
+    {% endif %}
+  </div>
+
+  {# Historial de llamadas #}
+  <div style="margin-bottom:1.5rem">
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
+      <span class="material-symbols-outlined text-base leading-none">call</span>
+      {% trans "Llamadas" %}
+    </h3>
+    {% if call_logs %}
+      <div style="display:flex;flex-direction:column;gap:0.5rem">
+        {% for log in call_logs %}
+          <div class="bg-base-50 dark:bg-base-800 rounded-default px-3 py-2 text-sm flex items-center gap-2">
+            <span class="font-medium">{{ log.duration_minutes }} min</span>
+            <span class="text-gray-500">{{ log.get_direction_display }}</span>
+            {% if log.notes %}<span class="text-gray-400 text-xs">{{ log.notes }}</span>{% endif %}
+            <span class="text-gray-400 text-xs ml-auto">{{ log.date|date:"d/m/Y H:i" }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% component "unfold/components/empty_state.html" with icon="call" title=_("Sin llamadas registradas") %}{% endcomponent %}
+    {% endif %}
+  </div>
+
+  {# Redes sociales #}
+  <div>
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
+      <span class="material-symbols-outlined text-base leading-none">share</span>
+      {% trans "Redes sociales" %}
+    </h3>
+    {% if social_profiles %}
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        {% for profile in social_profiles %}
+          <a href="{{ profile.url }}" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-base-100 dark:bg-base-800 text-gray-700 dark:text-gray-300 rounded-default hover:bg-base-200 dark:hover:bg-base-700 transition-colors">
+            <span class="material-symbols-outlined text-sm leading-none">link</span>
+            {{ profile.get_network_display }}
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% component "unfold/components/empty_state.html" with icon="share" title=_("Sin redes sociales") %}{% endcomponent %}
+    {% endif %}
+  </div>
+
+</div>

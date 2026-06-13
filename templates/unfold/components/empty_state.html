@@ -1,5 +1,5 @@
 {% load i18n %}
-{#
+<!--
   Estado vacío reutilizable para listas, tablas y secciones sin datos.
 
   Parámetros:
@@ -11,16 +11,16 @@
     class        — string (opcional) — clases extra para el contenedor
 
   Uso sin acción:
-    {% component "unfold/components/empty_state.html"
-       with icon="inbox" title=_("Sin registros") subtitle=_("Aún no hay datos.") %}
-    {% endcomponent %}
+    [component "unfold/components/empty_state.html"
+       with icon="inbox" title=_("Sin registros") subtitle=_("Aún no hay datos.")]
+    [endcomponent]
 
   Uso con acción:
-    {% component "unfold/components/empty_state.html"
+    [component "unfold/components/empty_state.html"
        with icon="group" title=_("Sin usuarios")
-            action_label=_("Crear usuario") action_url="/admin/core/user/add/" %}
-    {% endcomponent %}
-#}
+            action_label=_("Crear usuario") action_url="/admin/core/user/add/"]
+    [endcomponent]
+-->
 
 {% with icon=icon|default:"inbox" %}
 <div class="flex flex-col items-center justify-center py-12 px-6 text-center {{ class }}">

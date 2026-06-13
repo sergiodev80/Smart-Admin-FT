@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import json
 import logging
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -71,16 +72,24 @@ class NotificationService:
                 body_bytes,
                 hashlib.sha256,
             ).hexdigest()
-            try:
-                requests.post(
-                    endpoint.url,
-                    data=body_bytes,
-                    headers={
-                        "Content-Type": "application/json",
-                        "X-Signature": f"sha256={signature}",
-                    },
-                    timeout=5,
-                )
+            headers = {
+                "Content-Type": "application/json",
+                "X-Signature": f"sha256={signature}",
+            }
+            delivered = False
+            for attempt, delay in enumerate([0, 1, 2, 4], start=1):
+                if delay:
+                    time.sleep(delay)
+                try:
+                    requests.post(endpoint.url, data=body_bytes, headers=headers, timeout=5)
+                    delivered = True
+                    break
+                except requests.RequestException as e:
+                    logger.warning(
+                        "Webhook POST attempt %d/4 failed to %s: %s",
+                        attempt, endpoint.url, e,
+                    )
+            if delivered:
                 Notification.objects.create(
                     recipient=user,
                     title=title,
@@ -89,5 +98,5 @@ class NotificationService:
                     payload=payload,
                     sent_at=datetime.now(tz=timezone.utc),
                 )
-            except requests.RequestException as e:
-                logger.error("Webhook POST failed to %s: %s", endpoint.url, e)
+            else:
+                logger.error("Webhook delivery failed after 4 attempts to %s", endpoint.url)

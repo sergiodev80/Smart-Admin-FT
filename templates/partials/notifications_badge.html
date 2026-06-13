@@ -1,12 +1,3 @@
-<span id="notifications-badge"
-      hx-get="{% url 'notifications_unread_count' %}"
-      hx-trigger="every 30s"
-      hx-swap="outerHTML"
-      class="relative inline-flex items-center">
-  <span class="material-symbols-outlined text-2xl leading-none">notifications</span>
-  {% if count > 0 %}
-  <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white leading-none">
-    {{ count }}
-  </span>
-  {% endif %}
-</span>
+{% if count > 0 %}
+<span class="flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white leading-none">{{ count }}</span>
+{% endif %}

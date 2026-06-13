@@ -1,5 +1,5 @@
 {% load i18n %}
-{#
+<!--
   Valor con botón de copia al portapapeles. Ícono cambia a ✓ por 2 segundos al copiar.
 
   Parámetros:
@@ -9,20 +9,20 @@
     truncate   — bool (default: False): truncar valor largo con …
 
   Uso básico:
-    {% component "unfold/components/copy_to_clipboard.html"
-       with value=obj.uuid %}
-    {% endcomponent %}
+    [component "unfold/components/copy_to_clipboard.html"
+       with value=obj.uuid]
+    [endcomponent]
 
   Con label:
-    {% component "unfold/components/copy_to_clipboard.html"
-       with value=api_token label=_("Token API") %}
-    {% endcomponent %}
+    [component "unfold/components/copy_to_clipboard.html"
+       with value=api_token label=_("Token API")]
+    [endcomponent]
 
   Solo ícono:
-    {% component "unfold/components/copy_to_clipboard.html"
-       with value=obj.uuid show_value=False %}
-    {% endcomponent %}
-#}
+    [component "unfold/components/copy_to_clipboard.html"
+       with value=obj.uuid show_value=False]
+    [endcomponent]
+-->
 
 <div
   x-data="{

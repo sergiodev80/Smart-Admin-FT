@@ -10,7 +10,7 @@ LOCAL_APPS = [
     "apps.audit",
     "apps.config",
     "apps.permissions",
-    "apps.clientes",
+    "apps.crm_demo",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS  # noqa: F405

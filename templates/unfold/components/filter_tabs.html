@@ -1,5 +1,5 @@
 {% load i18n %}
-{#
+<!--
   Tabs de filtro con conteos cargados async via HTMX.
 
   Parámetros:
@@ -12,12 +12,12 @@
                    "success" | "warning" | "danger" | "info" | "neutral" (default)
 
   Uso:
-    {% component "unfold/components/filter_tabs.html" with tabs=tabs %}{% endcomponent %}
+    [component "unfold/components/filter_tabs.html" with tabs=tabs][endcomponent]
 
   Vista de conteo (retorna solo el número como texto plano):
     def mi_count_view(request):
         return HttpResponse(str(MiModelo.objects.filter(...).count()))
-#}
+-->
 
 <nav class="bg-base-100 dark:bg-white/[.06] flex flex-row font-medium gap-1 p-1 rounded-default text-sm md:w-auto"
      aria-label="{% trans 'Filtros' %}">

@@ -1,0 +1,62 @@
+{% load i18n unfold %}
+
+{# Modal shell inline — evita component slot issues #}
+<div class="bg-white dark:bg-base-900 rounded-default shadow-xl overflow-hidden" style="width:28rem;max-width:90vw">
+
+  {# Header #}
+  <div class="flex items-start justify-between px-6 py-4 border-b border-base-200 dark:border-base-700">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-xl text-primary-600 dark:text-primary-400">person_add</span>
+      <h2 class="text-base font-semibold text-gray-900 dark:text-white">{% trans "Nuevo contacto" %}</h2>
+    </div>
+    <button type="button" x-on:click="openModal = false"
+            class="p-1.5 rounded-default text-gray-400 hover:bg-base-100 dark:hover:bg-base-800 transition-colors ml-4">
+      <span class="material-symbols-outlined text-xl leading-none">close</span>
+    </button>
+  </div>
+
+  {# Body #}
+  <div class="px-6 py-5">
+    <form hx-post="{% url 'crm_contact_create' %}"
+          hx-target="closest [x-data]"
+          hx-swap="outerHTML"
+          style="display:flex;flex-direction:column;gap:1rem">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-default px-3 py-2">
+          {% for error in form.non_field_errors %}
+            <p class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% for field in form %}
+        <div>
+          <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+            {{ field.label }}{% if field.field.required %} *{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <p class="text-xs text-red-500 mt-1">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div style="display:flex;justify-content:flex-end;gap:0.75rem;padding-top:0.5rem">
+        <button type="button"
+                x-on:click="openModal = false"
+                class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-base-100 dark:hover:bg-base-800 rounded-default transition-colors">
+          {% trans "Cancelar" %}
+        </button>
+        <button type="submit"
+                class="px-4 py-2 text-sm font-medium bg-primary-600 hover:bg-primary-700 text-white rounded-default transition-colors">
+          {% trans "Crear contacto" %}
+        </button>
+      </div>
+    </form>
+  </div>
+
+</div>
